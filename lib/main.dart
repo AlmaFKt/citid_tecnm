@@ -1,5 +1,8 @@
 import 'package:citid_tecnm/Sesiones/InicioSesion.dart';
-import 'package:citid_tecnm/Sesiones/Registro.dart';
+import 'package:citid_tecnm/Sesiones/registros/MainRegistro.dart';
+import 'package:citid_tecnm/Sesiones/registros/RegistroPonente.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:citid_tecnm/content/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +18,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'CITID',
       debugShowCheckedModeBanner: false,
-      home: InicioSesion(),
+      home: HomePage(),
     );
   }
 }

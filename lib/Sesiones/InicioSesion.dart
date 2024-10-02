@@ -1,11 +1,14 @@
 import 'package:citid_tecnm/Sesiones/OlvidoContrase%C3%B1a.dart';
+import 'package:citid_tecnm/Sesiones/registros/MainRegistro.dart';
+import 'package:citid_tecnm/componentes/Theme.dart';
+import 'package:citid_tecnm/componentes/widgets.dart';
+import 'package:citid_tecnm/content/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../componentes/boton.dart';
 import '../componentes/textfield.dart';
-import 'Registro.dart';
 
 class InicioSesion extends StatefulWidget {
   InicioSesion({super.key});
@@ -18,6 +21,7 @@ class _InicioSesionState extends State<InicioSesion> {
   //Text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool _isObscure = true;
 
   //sign user in method event
   void signUserIn() async {
@@ -78,8 +82,7 @@ class _InicioSesionState extends State<InicioSesion> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: null, // Set the appBar property to null
-        backgroundColor: Color.fromARGB(255, 240, 240, 240),
+        backgroundColor: blanco,
         body: Center(
           child: Container(
             width: MediaQuery.of(context).size.width * 0.9,
@@ -87,6 +90,15 @@ class _InicioSesionState extends State<InicioSesion> {
             child: SafeArea(
               child: SingleChildScrollView(
                 child: Column(children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Get.offAll(HomePage());
+                      },
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16, left: 16),
                     child: Align(
@@ -96,9 +108,7 @@ class _InicioSesionState extends State<InicioSesion> {
                   Center(
                     child: Column(
                       children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
+                        sb10,
                         //Logo
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -110,9 +120,7 @@ class _InicioSesionState extends State<InicioSesion> {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        sb25,
 
                         Center(
                           child: Container(
@@ -120,88 +128,82 @@ class _InicioSesionState extends State<InicioSesion> {
                             child: Text(
                               'CITID TecNM',
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.aboreto(fontSize: 38),
+                              style: GoogleFonts.aboreto(
+                                  fontSize: 38, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
 
-                        const SizedBox(
-                          height: 20,
-                          width: 20,
-                        ),
+                        sb25,
 
                         //(Welcome!) text
                         Text('Bienvenido',
                             style: GoogleFonts.heebo(fontSize: 20)),
 
-                        const SizedBox(
-                          height: 20,
-                          width: 20,
-                        ), // this makes a type of space between your objects
+                        sb25,
 
-                        //username textfield
+                        //username textfield (libreria de componentes)
                         MyTextField(
                           controller: emailController,
                           hintText: 'Email',
                           obscureText: false,
-                        ), // u can find the code for this object in components
-
-                        const SizedBox(
-                          height: 12,
-                          width: 20,
                         ),
+
+                        sb13,
 
                         //password textfield
                         MyTextField(
                           controller: passwordController,
                           hintText: 'Contraseña',
-                          obscureText: true,
+                          obscureText: _isObscure,
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isObscure
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isObscure = !_isObscure;
+                              });
+                            },
+                          ),
                         ),
 
-                        const SizedBox(
-                          height: 12,
-                          width: 20,
-                        ),
+                        sb13,
 
-                        //forgot password TEXT (In a row)
+                        //forgot password TEXT
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: GestureDetector(
                             onTap: () {
-                              Get.to(OlvidocontrasenaPage());
+                              Get.to(OlvidoContrasena());
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text(
                                   '¿Olvidaste tu contraseña?',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 160, 55, 29)),
+                                  style: TextStyle(color: grisOscuro),
                                 ),
                               ],
                             ),
                           ),
                         ),
 
-                        const SizedBox(
-                          height: 32,
-                          width: 20,
-                        ),
+                        sb30,
 
                         //log in button
                         MyButton(
                           text: 'Ingresar',
                           onTap: () {
-                            signUserIn();
+                            Get.to(HomePage());
+                            //signUserIn();
                           },
                         ),
 
-                        const SizedBox(
-                          height: 32,
-                          width: 20,
-                        ),
+                        sb30,
 
-                        //Dont have an account? Register now
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: Row(
@@ -209,7 +211,7 @@ class _InicioSesionState extends State<InicioSesion> {
                               Expanded(
                                 child: Divider(
                                   thickness: 0.5,
-                                  color: Color.fromARGB(255, 76, 103, 163),
+                                  color: grisClaro,
                                 ),
                               ),
                               Padding(
@@ -217,66 +219,38 @@ class _InicioSesionState extends State<InicioSesion> {
                                     horizontal: 10.0),
                                 child: Text(
                                   '¿No tienes una cuenta?',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(183, 66, 66, 66)),
+                                  style: TextStyle(color: gris),
                                 ),
                               ),
                               Expanded(
                                 child: Divider(
                                   thickness: 0.5,
-                                  color: Color.fromARGB(255, 76, 103, 163),
+                                  color: grisClaro,
                                 ),
                               ),
                             ],
                           ),
                         ),
 
-                        const SizedBox(
-                          height: 32,
-                          width: 20,
-                        ),
-
-                        //Register now text
-                        Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 170.0),
-                          child: Expanded(
-                            child: Divider(
-                              thickness: 0.4,
-                              color: Color.fromARGB(255, 5, 5, 5),
-                            ),
-                          ),
-                        ),
+                        sb30,
+                        divider,
 
                         GestureDetector(
                           onTap: () {
                             // Navigate to the register page
-                            Get.to(RegisterPage());
+                            Get.to(Mainregistro());
                           },
                           child: Text(
                             'Registrarse',
-                            style: GoogleFonts.robotoSlab(
+                            style: GoogleFonts.aBeeZee(
                               fontSize: 15,
-                              textStyle: TextStyle(
-                                  color: Color.fromARGB(255, 160, 55, 29)),
+                              textStyle: TextStyle(color: azulODifuminado),
                             ),
                           ),
                         ),
 
-                        const SizedBox(
-                          height: 5,
-                        ),
-
-                        Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 170.0),
-                          child: Expanded(
-                            child: Divider(
-                              thickness: 0.4,
-                              color: Color.fromARGB(255, 5, 5, 5),
-                            ),
-                          ),
-                        ),
+                        sb5,
+                        divider,
                       ],
                     ),
                   ),

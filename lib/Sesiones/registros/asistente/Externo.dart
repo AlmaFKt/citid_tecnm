@@ -5,21 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../componentes/Theme.dart';
-import '../componentes/boton.dart';
-import '../componentes/textfield.dart';
-import '../componentes/textfieldOpt.dart';
+import '../../../componentes/Theme.dart';
+import '../../../componentes/boton.dart';
+import '../../../componentes/textfield.dart';
+import '../../../componentes/textfieldOpt.dart';
 
-//PONENTES
+//Externo
 
-class RegisterPage extends StatefulWidget {
-  RegisterPage({super.key});
+class ExternoPage extends StatefulWidget {
+  ExternoPage({super.key});
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _ExternoPageState createState() => _ExternoPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _ExternoPageState extends State<ExternoPage> {
   //Text editing controllers
   final usernameController = TextEditingController();
   final apellidosController = TextEditingController();
@@ -118,12 +118,12 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 240, 240, 240),
-      body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.9,
-          constraints: BoxConstraints(maxWidth: 700),
-          child: SafeArea(
-            child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            constraints: BoxConstraints(maxWidth: 700),
+            child: SafeArea(
               child: Center(
                 child: Column(
                   children: [
@@ -156,7 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
 
                     sb13,
-
+                    Text(' Externo', style: GoogleFonts.heebo(fontSize: 20)),
                     //(Welcome!) text
                     Text('Ingresa tus datos',
                         style: GoogleFonts.heebo(fontSize: 20)),
@@ -336,7 +336,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       //GestureD is for making everythin that its inside a button
                       child: Text(
                         "Ingresar",
-                        style: GoogleFonts.robotoSlab(
+                        style: GoogleFonts.aBeeZee(
                           fontSize: 15,
                           textStyle: TextStyle(
                               color: Color.fromARGB(255, 160, 55, 29)),
