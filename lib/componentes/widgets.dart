@@ -13,23 +13,6 @@ var myAppBar = AppBar(
     width: 250,
   ),
   actions: [
-    GestureDetector(
-        child: Text("Acerca de...",
-            style: TextStyle(color: blanco, fontSize: 20))),
-            sb5,
-            GestureDetector(
-        child: Text("Fechas importantes",
-            style: TextStyle(color: blanco, fontSize: 20))),
-            GestureDetector(
-        child: Text("Ponentes destacados",
-            style: TextStyle(color: blanco, fontSize: 20))),
-             GestureDetector(
-        child: Text("Ponentes destacados",
-            style: TextStyle(color: blanco, fontSize: 20)),
-            onTap: (){
-              
-            }),
-            
     IconButton(
       icon: Icon(Icons.home, color: blanco),
       onPressed: () => Get.to(HomePage()),

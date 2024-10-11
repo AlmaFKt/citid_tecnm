@@ -3,6 +3,7 @@ import 'package:citid_tecnm/Sesiones/registros/MainRegistro.dart';
 import 'package:citid_tecnm/componentes/Theme.dart';
 import 'package:citid_tecnm/componentes/boton.dart';
 import 'package:citid_tecnm/componentes/widgets.dart';
+import 'package:citid_tecnm/content/revision.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -230,6 +231,11 @@ class _HomePageState extends State<HomePage> {
           sb25,
           _buildCongressInfoSection(),
           sb25,
+          MyButton(
+              text: 'Revisiones',
+              onTap: () {
+                Get.to(revision());
+              }),
           _buildImportantDatesSection(),
           sb25,
           _buildKeynoteSpeakersSection(),

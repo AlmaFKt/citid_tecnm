@@ -18,3 +18,22 @@ var gris = Color.fromARGB(255, 164, 164, 164);
 var grisClaro = Color.fromARGB(255, 188, 179, 187);
 var grisOscuro = Color.fromARGB(255, 108, 108, 108);
 var blanco = Color.fromARGB(255, 240, 240, 240);
+var negro = Color.fromARGB(255, 0, 0, 0);
+
+// Text Styles
+var titulo = TextStyle(
+  fontSize: 20,
+  fontWeight: FontWeight.bold,
+  color: negro,
+);
+
+var subtitulo = TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w500,
+  color: negro,
+);
+
+var texto = TextStyle(
+  fontSize: 14,
+  color: negro,
+);
