@@ -37,6 +37,7 @@ class _RevisorWorkspaceState extends State<RevisorWorkspace> {
       'agradecimientos': 'Agradecimientos a instituciones y colegas...',
       'referencias': 'Referencias bibliográficas...',
     },
+    // Add more articles as needed
   ];
 
   void _evaluarArticulo(int index) {
@@ -55,61 +56,66 @@ class _RevisorWorkspaceState extends State<RevisorWorkspace> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Workspace del Revisor'),
-      ),
-      body: ListView.builder(
+    return Scaffold( backgroundColor: blanco,
+      appBar: myAppBar,
+      body:
+       ListView.builder(
         itemCount: _articulos.length,
         itemBuilder: (context, index) {
           var articulo = _articulos[index];
-          return Card(
-            margin: EdgeInsets.all(10),
-            child: Padding(
-              padding: EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    articulo['autores'],
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    articulo['titulo'],
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Estado: ${articulo['estado']}'),
-                      ElevatedButton(
-                        child: Text('Evaluar'),
-                        onPressed: () => _evaluarArticulo(index),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        child: Text('Descargar PDF'),
-                        onPressed: _descargarPDF,
-                      ),
-                      Row(
-                        children: [
-                          Text('Aceptado: '),
-                          Switch(
-                            value: articulo['aceptado'] ?? false,
-                            onChanged: (value) => _toggleAceptado(index),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+          return Container(
+            constraints: BoxConstraints(maxWidth: 600),
+            child: Card(
+              shape: RoundedRectangleBorder(
+              side: BorderSide(color: azulITZ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+              child: Padding(
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      articulo['autores'],
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      articulo['titulo'],
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Estado: ${articulo['estado']}'),
+                        ElevatedButton(
+                          child: Text('Evaluar'),
+                          onPressed: () => _evaluarArticulo(index),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          child: Text('Descargar PDF'),
+                          onPressed: _descargarPDF,
+                        ),
+                        Row(
+                          children: [
+                            Text('Aceptado: '),
+                            Switch(
+                              value: articulo['aceptado'] ?? false,
+                              onChanged: (value) => _toggleAceptado(index),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           );

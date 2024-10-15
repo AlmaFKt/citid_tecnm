@@ -73,11 +73,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                     IconButton(
                       icon: Icon(Icons.info_outline, color: blanco),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(SubirArchivo());
+                      },
                     ),
                     IconButton(
                       icon: Icon(Icons.calendar_month, color: blanco),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(RevisorWorkspace());
+                      },
                     ),
                     IconButton(
                       icon: Icon(Icons.account_circle_outlined, color: blanco),
@@ -87,7 +91,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                     IconButton(
                       icon: Icon(Icons.contact_page, color: blanco),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(ListaArticulos());
+                      },
                     )
                   ],
           ),
@@ -231,11 +237,6 @@ class _HomePageState extends State<HomePage> {
           sb25,
           _buildCongressInfoSection(),
           sb25,
-          MyButton(
-              text: 'Revisiones',
-              onTap: () {
-                Get.to(revision());
-              }),
           _buildImportantDatesSection(),
           sb25,
           _buildKeynoteSpeakersSection(),
