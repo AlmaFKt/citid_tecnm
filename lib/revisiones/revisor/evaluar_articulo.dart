@@ -1,3 +1,5 @@
+import 'package:citid_tecnm/componentes/Theme.dart';
+import 'package:citid_tecnm/componentes/boton.dart';
 import 'package:flutter/material.dart';
 
 class ArticleReviewWorkspace extends StatefulWidget {
@@ -11,37 +13,71 @@ class ArticleReviewWorkspace extends StatefulWidget {
 
 class _ArticleReviewWorkspaceState extends State<ArticleReviewWorkspace> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _observationsController;
+  final Map<String, TextEditingController> _observationControllers = {};
 
   @override
   void initState() {
     super.initState();
-    _observationsController = TextEditingController();
+    _initializeControllers();
+  }
+
+  void _initializeControllers() {
+    final fields = [
+      'titulo',
+      'autores',
+      'area',
+      'resumen',
+      'introduccion',
+      'seccionExperimental',
+      'resultadosDiscusion',
+      'conclusiones',
+      'agradecimientos',
+      'referencias',
+      'autorizacionRenuncia'
+    ];
+    for (var field in fields) {
+      _observationControllers[field] = TextEditingController();
+    }
   }
 
   @override
   void dispose() {
-    _observationsController.dispose();
+    _observationControllers.forEach((key, controller) {
+      controller.dispose();
+    });
     super.dispose();
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        title,
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Widget _buildSectionContent(String content) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Text(
-        content,
-        style: TextStyle(fontSize: 12),
-      ),
+  Widget _buildSection(String title, String fieldName, {String? content}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            title,
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: azulITZ),
+          ),
+        ),
+        if (content != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              content,
+              style: TextStyle(fontSize: 14),
+            ),
+          ),
+        TextFormField(
+          controller: _observationControllers[fieldName],
+          maxLines: 3,
+          decoration: InputDecoration(
+            labelText: 'Observaciones...',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        SizedBox(height: 16),
+      ],
     );
   }
 
@@ -50,65 +86,66 @@ class _ArticleReviewWorkspaceState extends State<ArticleReviewWorkspace> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Revisión de Artículo'),
+        backgroundColor: azulClaro,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.article['titulo'],
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 850),
+            padding: EdgeInsets.all(16.0),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
               ),
-              SizedBox(height: 8),
-              Text('Autores: ${widget.article['autores']}'),
-              Text('Área de Participación: ${widget.article['area']}'),
-              SizedBox(height: 16),
-              _buildSectionTitle('Resumen'),
-              _buildSectionContent(widget.article['resumen']),
-              _buildSectionTitle('Introducción'),
-              _buildSectionContent(widget.article['introduccion']),
-              _buildSectionTitle('Sección Experimental y/o Fundamento Teórico'),
-              _buildSectionContent(widget.article['seccionExperimental']),
-              _buildSectionTitle('Resultados y Discusión'),
-              _buildSectionContent(widget.article['resultadosDiscusion']),
-              _buildSectionTitle('Conclusiones'),
-              _buildSectionContent(widget.article['conclusiones']),
-              _buildSectionTitle('Agradecimientos'),
-              _buildSectionContent(widget.article['agradecimientos']),
-              _buildSectionTitle('Referencias'),
-              _buildSectionContent(widget.article['referencias']),
-              SizedBox(height: 24),
-              Text(
-                'Observaciones del Revisor',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              TextFormField(
-                controller: _observationsController,
-                maxLines: 5,
-                decoration: InputDecoration(
-                  hintText: 'Ingrese sus observaciones aquí',
-                  border: OutlineInputBorder(),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildSection('Título', 'titulo',
+                          content: widget.article['titulo']),
+                      _buildSection('Autores', 'autores',
+                          content: widget.article['autores']),
+                      _buildSection('Área de Participación', 'area',
+                          content: widget.article['area']),
+                      _buildSection('Resumen', 'resumen',
+                          content: widget.article['resumen']),
+                      _buildSection('Introducción', 'introduccion',
+                          content: widget.article['introduccion']),
+                      _buildSection(
+                          'Sección Experimental y/o Fundamento Teórico',
+                          'seccionExperimental',
+                          content:
+                              'Escribir el texto de la Sección Experimental o del Fundamento Teórico'),
+                      _buildSection(
+                          'Resultados y Discusión', 'resultadosDiscusion',
+                          content: 'Tabla X.- \nFigura X.-'),
+                      _buildSection('Conclusiones', 'conclusiones',
+                          content: widget.article['conclusiones']),
+                      _buildSection('Agradecimientos', 'agradecimientos',
+                          content: widget.article['agradecimientos']),
+                      _buildSection('Referencias (Formato APA)', 'referencias',
+                          content: 'Ejemplos:'),
+                      _buildSection(
+                          'Autorización y renuncia', 'autorizacionRenuncia',
+                          content: '...'),
+                      SizedBox(height: 16),
+                      Center(
+                        child: MyButton(
+                          text: 'Enviar revisón',
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {}
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor ingrese sus observaciones';
-                  }
-                  return null;
-                },
               ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    print('Observaciones: ${_observationsController.text}');
-                  }
-                },
-                child: Text('Enviar Revisión'),
-              ),
-            ],
+            ),
           ),
         ),
       ),

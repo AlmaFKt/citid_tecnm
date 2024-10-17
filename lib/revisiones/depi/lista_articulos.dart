@@ -100,96 +100,101 @@ class _ListaArticulosState extends State<ListaArticulos> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: filteredArticulos.length,
-        itemBuilder: (context, index) {
-          var articulo = filteredArticulos[index];
-          return Card(
-            margin: EdgeInsets.all(10),
-            elevation: 3,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-              side: BorderSide(color: Colors.grey.shade300, width: 1),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 750),
+          child: ListView.builder(
+            itemCount: filteredArticulos.length,
+            itemBuilder: (context, index) {
+              var articulo = filteredArticulos[index];
+              return Card(
+                margin: EdgeInsets.all(10),
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  side: BorderSide(color: Colors.grey.shade300, width: 1),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        articulo['nombrePonente'],
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      ElevatedButton(
-                        child: Text('Ver'),
-                        onPressed: () {
-                          Get.to(ArticleDetail(article: articulo));
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            articulo['nombrePonente'],
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                        ),
+                          ElevatedButton(
+                            child: Text('Ver'),
+                            onPressed: () {
+                              Get.to(ArticleDetail(article: articulo));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Text('Artículo: ${articulo['nombreArticulo']}',
-                      style: TextStyle(fontSize: 16)),
-                  Text('Área: ${articulo['area']}'),
-                  Text('Tema: ${articulo['tema']}'),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Estado: ${articulo['estado']}',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(height: 10),
+                      Text('Artículo: ${articulo['nombreArticulo']}',
+                          style: TextStyle(fontSize: 16)),
+                      Text('Área: ${articulo['area']}'),
+                      Text('Tema: ${articulo['tema']}'),
+                      SizedBox(height: 10),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(
-                              articulo['pagado']
-                                  ? Icons.check_circle
-                                  : Icons.cancel,
-                              color: articulo['pagado']
-                                  ? Colors.green
-                                  : Colors.red),
-                          SizedBox(width: 5),
-                          Text(articulo['pagado'] ? 'Pagado' : 'No pagado'),
+                          Text('Estado: ${articulo['estado']}',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          Row(
+                            children: [
+                              Icon(
+                                  articulo['pagado']
+                                      ? Icons.check_circle
+                                      : Icons.cancel,
+                                  color: articulo['pagado']
+                                      ? Colors.green
+                                      : Colors.red),
+                              SizedBox(width: 5),
+                              Text(articulo['pagado'] ? 'Pagado' : 'No pagado'),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Revisor: ${articulo['revisor']}'),
+                          Row(
+                            children: [
+                              Icon(
+                                  articulo['autorizado']
+                                      ? Icons.check_circle
+                                      : Icons.cancel,
+                                  color: articulo['autorizado']
+                                      ? Colors.green
+                                      : Colors.red),
+                              SizedBox(width: 5),
+                              Text(articulo['autorizado']
+                                  ? 'Autorizado'
+                                  : 'No autorizado'),
+                            ],
+                          ),
                         ],
                       ),
                     ],
                   ),
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Revisor: ${articulo['revisor']}'),
-                      Row(
-                        children: [
-                          Icon(
-                              articulo['autorizado']
-                                  ? Icons.check_circle
-                                  : Icons.cancel,
-                              color: articulo['autorizado']
-                                  ? Colors.green
-                                  : Colors.red),
-                          SizedBox(width: 5),
-                          Text(articulo['autorizado']
-                              ? 'Autorizado'
-                              : 'No autorizado'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+                ),
+              );
+            },
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.delete),

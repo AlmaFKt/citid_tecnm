@@ -3,12 +3,15 @@ import 'package:citid_tecnm/Sesiones/registros/MainRegistro.dart';
 import 'package:citid_tecnm/componentes/Theme.dart';
 import 'package:citid_tecnm/componentes/boton.dart';
 import 'package:citid_tecnm/componentes/widgets.dart';
-import 'package:citid_tecnm/content/revision.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../Sesiones/InicioSesion.dart';
+import '../revisiones/depi/lista_articulos.dart';
+import '../revisiones/ponente/subir_archivo.dart';
+import '../revisiones/revisor/lista_articulos_rev.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -18,6 +21,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey _congressInfoKey = GlobalKey();
+  final GlobalKey _importantDatesKey = GlobalKey();
+  final GlobalKey _speakersKey = GlobalKey();
+
+  late CalendarController _calendarController;
+  List<Appointment> _appointments = <Appointment>[];
   int _currentIndex = 0;
 
   final List<Map<String, String>> _speakers = [
@@ -35,6 +45,44 @@ class _HomePageState extends State<HomePage> {
     },
   ];
   @override
+  void initState() {
+    super.initState();
+    _calendarController = CalendarController();
+    _initializeAppointments();
+  }
+
+  void _initializeAppointments() {
+    _appointments = <Appointment>[
+      Appointment(
+        startTime: DateTime(2024, 10, 1, 9, 5),
+        endTime: DateTime(2024, 10, 1, 10, 0),
+        subject: 'Event 1',
+        color: Colors.blue,
+      ),
+      Appointment(
+        startTime: DateTime(2024, 10, 15, 14, 0),
+        endTime: DateTime(2024, 10, 15, 15, 0),
+        subject: 'Event 2',
+        color: Colors.green,
+      ),
+      Appointment(
+        startTime: DateTime(2024, 10, 15, 14, 0),
+        endTime: DateTime(2024, 10, 15, 15, 0),
+        subject: 'Event 2',
+        color: azulITZ,
+      ),
+    ];
+  }
+
+  void _scrollToSection(GlobalKey key) {
+    final context = key.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(context,
+          duration: Duration(seconds: 1), curve: Curves.easeInOut);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -51,21 +99,21 @@ class _HomePageState extends State<HomePage> {
                 ? null
                 : [
                     GestureDetector(
-                      child: Text("Acerca de...",
+                      child: Text("Acerca de ...",
                           style: TextStyle(color: blanco, fontSize: 20)),
-                      onTap: () {},
+                      onTap: () => _scrollToSection(_congressInfoKey),
                     ),
-                    SizedBox(width: 5),
+                    SizedBox(width: 14),
                     GestureDetector(
                       child: Text("Fechas importantes",
                           style: TextStyle(color: blanco, fontSize: 20)),
-                      onTap: () {},
+                      onTap: () => _scrollToSection(_importantDatesKey),
                     ),
-                    SizedBox(width: 5),
+                    SizedBox(width: 14),
                     GestureDetector(
                       child: Text("Ponentes destacados",
                           style: TextStyle(color: blanco, fontSize: 20)),
-                      onTap: () {},
+                      onTap: () => _scrollToSection(_speakersKey),
                     ),
                     IconButton(
                       icon: Icon(Icons.home, color: blanco),
@@ -86,7 +134,11 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                       icon: Icon(Icons.account_circle_outlined, color: blanco),
                       onPressed: () {
-                        Get.to(InicioSesion());
+                        if (FirebaseAuth.instance.currentUser != null) {
+                          Get.to(SubirArchivo());
+                        } else {
+                          Get.to(InicioSesion());
+                        }
                       },
                     ),
                     IconButton(
@@ -117,22 +169,22 @@ class _HomePageState extends State<HomePage> {
                       ),
                       ListTile(
                         leading: Icon(Icons.home),
-                        title: Text('Home'),
+                        title: Text('Inicio'),
                         onTap: () => Get.to(HomePage()),
                       ),
                       ListTile(
                         leading: Icon(Icons.info_outline),
-                        title: Text('Acerca de...'),
-                        onTap: () {},
+                        title: Text('Información'),
+                        onTap: () => _scrollToSection(_congressInfoKey),
                       ),
                       ListTile(
                         leading: Icon(Icons.calendar_month),
-                        title: Text('Fechas importantes'),
-                        onTap: () {},
+                        title: Text('Programa'),
+                        onTap: () => _scrollToSection(_importantDatesKey),
                       ),
                       ListTile(
                         leading: Icon(Icons.account_circle_outlined),
-                        title: Text('Inicio Sesión'),
+                        title: Text('Registro'),
                         onTap: () {
                           Get.to(InicioSesion());
                         },
@@ -242,6 +294,7 @@ class _HomePageState extends State<HomePage> {
           _buildKeynoteSpeakersSection(),
           sb25,
           _buildObjectivesCard(),
+          sb30
         ],
       ),
     );
@@ -266,6 +319,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildCongressInfoSection() {
     return Column(
+      key: _congressInfoKey,
       children: [
         Text(
           'Acerca del Congreso',
@@ -281,23 +335,66 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+//////  Calendario  ////////
   Widget _buildImportantDatesSection() {
     return Column(
+      key: _importantDatesKey,
       children: [
         Text(
           'Fechas Importantes',
-          style: GoogleFonts.aboreto(fontSize: 26, fontWeight: FontWeight.bold),
+          style: titulo,
           textAlign: TextAlign.center,
         ),
         sb10,
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SfCalendar(
-            view: CalendarView.month,
-            headerStyle: CalendarHeaderStyle(
-              backgroundColor: azulOscuro,
-              textAlign: TextAlign.center,
-              textStyle: TextStyle(color: blanco),
+        Container(
+          height: 500,
+          child: Card(
+            elevation: 4,
+            child: Column(
+              children: [
+                if (_calendarController.view == CalendarView.day)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () {
+                            setState(() {
+                              _calendarController.view = CalendarView.month;
+                            });
+                          },
+                        ),
+                        Text(
+                          'Eventos del día',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 48),
+                      ],
+                    ),
+                  ),
+                Expanded(
+                  child: SfCalendar(
+                    view: CalendarView.month,
+                    controller: _calendarController,
+                    dataSource: _getCalendarDataSource(),
+                    onTap: _onCalendarTapped,
+                    monthViewSettings: MonthViewSettings(
+                      appointmentDisplayMode:
+                          MonthAppointmentDisplayMode.indicator,
+                      showAgenda: true,
+                      agendaViewHeight: 200,
+                    ),
+                    headerStyle: CalendarHeaderStyle(
+                      backgroundColor: azulOscuro,
+                      textAlign: TextAlign.center,
+                      textStyle: TextStyle(color: blanco, fontSize: 18),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -305,10 +402,25 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  CalendarDataSource _getCalendarDataSource() {
+    return _AppointmentDataSource(_appointments);
+  }
+
+  void _onCalendarTapped(CalendarTapDetails details) {
+    if (_calendarController.view == CalendarView.month &&
+        details.targetElement == CalendarElement.calendarCell) {
+      setState(() {
+        _calendarController.view = CalendarView.day;
+        _calendarController.displayDate = details.date;
+      });
+    }
+  }
+
   Widget _buildKeynoteSpeakersSection() {
     return Container(
       constraints: BoxConstraints(maxWidth: 320.0),
       child: Column(
+        key: _speakersKey,
         children: [
           Text(
             'Ponentes Destacados',
@@ -394,5 +506,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+}
+
+class _AppointmentDataSource extends CalendarDataSource {
+  _AppointmentDataSource(List<Appointment> source) {
+    appointments = source;
   }
 }

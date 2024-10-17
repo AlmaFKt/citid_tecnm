@@ -52,8 +52,7 @@ class _InicioSesionState extends State<InicioSesion> {
       // Close the loading indicator
       Navigator.pop(context);
 
-      // Navigate to the home page
-      // Get.to(() => HomePage());
+      Get.to(() => HomePage());
     } on FirebaseAuthException catch (e) {
       // Close the loading indicator
       Navigator.pop(context);
@@ -198,7 +197,7 @@ class _InicioSesionState extends State<InicioSesion> {
                           text: 'Ingresar',
                           onTap: () {
                             Get.to(HomePage());
-                            //signUserIn();
+                            signUserIn();
                           },
                         ),
 
@@ -237,7 +236,6 @@ class _InicioSesionState extends State<InicioSesion> {
 
                         GestureDetector(
                           onTap: () {
-                            // Navigate to the register page
                             Get.to(Mainregistro());
                           },
                           child: Text(

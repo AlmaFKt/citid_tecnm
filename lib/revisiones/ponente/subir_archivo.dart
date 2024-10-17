@@ -151,7 +151,7 @@ class _SubirArchivoState extends State<SubirArchivo> {
                     });
                   },
                   decoration: InputDecoration(
-                    labelText: 'Area del artículo',
+                    labelText: 'Area',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -170,7 +170,7 @@ class _SubirArchivoState extends State<SubirArchivo> {
                     });
                   },
                   decoration: InputDecoration(
-                    labelText: 'Tematica del artículo',
+                    labelText: 'Tematica',
                     border: OutlineInputBorder(),
                   ),
                 ),

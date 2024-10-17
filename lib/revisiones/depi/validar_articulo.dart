@@ -18,10 +18,10 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
   final List<String> areas = [
     'ISC',
-    'Computer Science',
-    'Physics',
-    'Biology',
-    'Chemistry'
+    'IGE',
+    'IC',
+    'IQ',
+    'IBQ',
   ];
   final List<String> themes = [
     'Desarrollo de aplicaciones',
@@ -32,11 +32,11 @@ class _ArticleDetailState extends State<ArticleDetail> {
     'Organic Chemistry'
   ];
   final Map<String, List<String>> reviewers = {
-    'ISC': ['Mario Humberto', 'Dr. Smith', 'Prof. Johnson'],
-    'Computer Science': ['Dr. Smith', 'Prof. Johnson'],
-    'Physics': ['Dr. Einstein', 'Prof. Curie'],
-    'Biology': ['Dr. Watson', 'Prof. Crick'],
-    'Chemistry': ['Dr. Bohr', 'Prof. Pauling'],
+    'ISC': ['Mario Humberto', 'Pedro Aragón', 'Javcer Cartujano'],
+    'IGE': ['PROFE1', 'Profe2'],
+    'IC': ['Dr. Einstein', 'Prof. Curie'],
+    'IQ': ['Dr. Watson', 'Prof. Crick'],
+    'IBQ': ['Dr. Bohr', 'Prof. Pauling'],
   };
 
   @override
@@ -69,97 +69,103 @@ class _ArticleDetailState extends State<ArticleDetail> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Ponente: ${widget.article['nombrePonente']}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              value: selectedArea,
-              items: areas.map((String area) {
-                return DropdownMenuItem<String>(
-                  value: area,
-                  child: Text(area),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  selectedArea = newValue!;
-                  selectedReviewer = reviewers[selectedArea]!.first;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Área del artículo',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              value: selectedTheme,
-              items: themes.map((String theme) {
-                return DropdownMenuItem<String>(
-                  value: theme,
-                  child: Text(theme),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  selectedTheme = newValue!;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Temática del artículo',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              value: selectedReviewer,
-              items: reviewers[selectedArea]!.map((String reviewer) {
-                return DropdownMenuItem<String>(
-                  value: reviewer,
-                  child: Text(reviewer),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  selectedReviewer = newValue!;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Revisor del artículo',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 10),
-            Row(
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 850),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Pagado: '),
-                Switch(
-                  value: isPaid,
-                  onChanged: (value) {
+                Text('Ponente: ${widget.article['nombrePonente']}',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  value: selectedArea,
+                  items: areas.map((String area) {
+                    return DropdownMenuItem<String>(
+                      value: area,
+                      child: Text(area),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
                     setState(() {
-                      isPaid = value;
+                      selectedArea = newValue!;
+                      selectedReviewer = reviewers[selectedArea]!.first;
                     });
                   },
+                  decoration: InputDecoration(
+                    labelText: 'Área del artículo',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  value: selectedTheme,
+                  items: themes.map((String theme) {
+                    return DropdownMenuItem<String>(
+                      value: theme,
+                      child: Text(theme),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedTheme = newValue!;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Temática del artículo',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  value: selectedReviewer,
+                  items: reviewers[selectedArea]!.map((String reviewer) {
+                    return DropdownMenuItem<String>(
+                      value: reviewer,
+                      child: Text(reviewer),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedReviewer = newValue!;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Revisor del artículo',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Text('Pagado: '),
+                    Switch(
+                      value: isPaid,
+                      onChanged: (value) {
+                        setState(() {
+                          isPaid = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text('Autorizado: '),
+                    Switch(
+                      value: isAccepted,
+                      onChanged: (value) {
+                        setState(() {
+                          isAccepted = value;
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
-            Row(
-              children: [
-                Text('Autorizado: '),
-                Switch(
-                  value: isAccepted,
-                  onChanged: (value) {
-                    setState(() {
-                      isAccepted = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );
