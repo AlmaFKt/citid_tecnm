@@ -3,6 +3,7 @@ import 'package:citid_tecnm/Sesiones/registros/MainRegistro.dart';
 import 'package:citid_tecnm/componentes/Theme.dart';
 import 'package:citid_tecnm/componentes/boton.dart';
 import 'package:citid_tecnm/componentes/widgets.dart';
+import 'package:citid_tecnm/content/programa.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -180,7 +181,9 @@ class _HomePageState extends State<HomePage> {
                       ListTile(
                         leading: Icon(Icons.calendar_month),
                         title: Text('Programa'),
-                        onTap: () => _scrollToSection(_importantDatesKey),
+                        onTap: () {
+                          Get.to(ProgramaEvento());
+                        },
                       ),
                       ListTile(
                         leading: Icon(Icons.account_circle_outlined),

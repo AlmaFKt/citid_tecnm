@@ -26,17 +26,17 @@ class _ArticleDetailState extends State<ArticleDetail> {
   final List<String> themes = [
     'Desarrollo de aplicaciones',
     'Inteligencia Artificial',
-    'AI',
-    'Quantum Mechanics',
-    'Genetics',
+    'ml',
+    'Mecanica Cuantica',
+    'Fisicoquímica',
     'Organic Chemistry'
   ];
   final Map<String, List<String>> reviewers = {
     'ISC': ['Mario Humberto', 'Pedro Aragón', 'Javcer Cartujano'],
     'IGE': ['PROFE1', 'Profe2'],
-    'IC': ['Dr. Einstein', 'Prof. Curie'],
-    'IQ': ['Dr. Watson', 'Prof. Crick'],
-    'IBQ': ['Dr. Bohr', 'Prof. Pauling'],
+    'IC': ['PROFE3', 'Profe4'],
+    'IQ': ['PROFE5', 'Profe6'],
+    'IBQ': ['PROFE7', 'Profe8'],
   };
 
   @override
