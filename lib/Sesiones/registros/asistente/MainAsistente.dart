@@ -1,6 +1,5 @@
 import 'package:citid_tecnm/Sesiones/registros/asistente/Empleado.dart';
 import 'package:citid_tecnm/Sesiones/registros/asistente/Estudiante.dart';
-import 'package:citid_tecnm/Sesiones/registros/RegistroPonente.dart';
 import 'package:citid_tecnm/Sesiones/registros/asistente/Externo.dart';
 import 'package:citid_tecnm/componentes/boton.dart';
 import 'package:flutter/material.dart';

@@ -20,48 +20,48 @@ class _SubirArchivoState extends State<SubirArchivo> {
   final TextEditingController _tituloController = TextEditingController();
 
   final Map<String, List<String>> _areaTemas = {
-    'IIN': [
+    'Ingeniería Industrial': [
       'MANUFACTURA ESBELTA Y CALIDAD',
     ],
-    'IEM': [
+    'Ingeniería Electromécanica': [
       'DISEÑO Y SIMULACIÓN DE SISTEMAS ELECTROMECÁNICOS',
     ],
-    'IC': [
+    'Ingeniería Civil': [
       'DISEÑO ESTRUCTURAL Y OBRAS CIVILES',
     ],
-    'IQ': [
+    'Ingeniería Química': [
       'MATERIALES POLIMÉRICOS',
       'TECNOLOGÍA AMBIENTAL',
       'BIOTECNOLOGÍA AMBIENTAL',
       'PROCESOS QUÍMICOS Y BIOQUÍMICOS'
     ],
-    'IBQ': [
+    'Ingeniería Bioquímica': [
       'PROCESOS QUÍMICOS Y BIOQUÍMICOS',
       'CIENCIA Y TECNOLOGÍA DE ALIMENTOS ',
       'BIOTECNOLOGÍA DE ALIMENTOS',
     ],
-    'CB': [
+    'Ciencias Básicas': [
       'ENSEÑANZA DE LAS CIENCIAS BÁSICAS',
       'ESTADÍSTICA Y TOMA DE DECISIONES',
       'RETOS Y PERSPECTIVAS EN LA APLICACIÓN DE LAS CIENCIAS BÁSICAS',
     ],
-    'IA': [
+    'Ingeniería en Administración de empresas': [
       'GESTIÓN DEL TALENTO HUMANO PARA LA INNOVACIÓN',
     ],
-    'IGE': [
+    'Ingeniería en Gestion Empresarial': [
       'INNOVACIÓN ESTRATÉGICA DE LAS ORGANIZACIONES',
     ],
-    'ISC': [
+    'Ingeniería en Sistemas Computacionales': [
       'APLICACIONES EN ENTORNOS WEB Y MÓVIL',
       'CIENCIA DE DATOS PARA LA TOMA DE DECISIONES',
       'INTELIGENCIA ARTIFICIAL',
       'INTERNET DE LAS COSAS',
     ],
-    'MC': [
+    'Maestría en Ciencias': [
       'BIOMATERIALES POLIMÉRICOS',
       'INGENIERÍA Y TECNOLOGÍA DE MATERIALES',
     ],
-    'MP': [
+    'Maestría en Procesos': [
       'DESARROLLO DE TECNOLOGÍA E INNOVACIÓN',
       'MODELADO Y SIMULACIÓN DE PROCESOS',
     ],

@@ -15,7 +15,7 @@ class _ListaArticulosState extends State<ListaArticulos> {
     {
       'nombrePonente': 'Marco Aurelio',
       'nombreArticulo': 'Flutter',
-      'area': 'ISC',
+      'area': 'Ing. en Sistemas Computacionales',
       'tema': 'Desarrollo de aplicaciones',
       'estado': 'Revisado',
       'pagado': true,
@@ -25,7 +25,7 @@ class _ListaArticulosState extends State<ListaArticulos> {
     {
       'nombrePonente': 'Juan Pérez',
       'nombreArticulo': 'Redes Neuronales',
-      'area': 'ISC',
+      'area': 'Ing. en Sistemas Computacionales',
       'tema': 'Inteligencia Artificial',
       'estado': 'Pendiente',
       'pagado': false,

@@ -79,8 +79,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
       // Guardar los datos del usuario en Firestore
       await FirebaseFirestore.instance
-          .collection('Ponentes')
-          .doc(userCredential.user!.uid)
+          .collection('registros')
+          .doc("Ponente")
+          .collection(userCredential.user!.uid)
+          .doc()
           .set({
         'RFC': rfcController.text,
         'Nombre(s)': usernameController.text,
@@ -124,245 +126,245 @@ class _RegisterPageState extends State<RegisterPage> {
             width: MediaQuery.of(context).size.width * 0.9,
             constraints: BoxConstraints(maxWidth: 700),
             child: SafeArea(
-                child: Center(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16, left: 16),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: IconButton(
-                            onPressed: () {
-                              Get.to(InicioSesion());
-                            },
-                            icon: const Icon(
-                              Icons.arrow_back,
-                              color: Color.fromARGB(255, 1, 0, 0),
+              child: Center(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16, left: 16),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: IconButton(
+                          onPressed: () {
+                            Get.to(InicioSesion());
+                          },
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: Color.fromARGB(255, 1, 0, 0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    sb10,
+
+                    Center(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'CITID TECNM',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.aboreto(fontSize: 38),
+                        ),
+                      ),
+                    ),
+
+                    sb13,
+
+                    //(Welcome!) text
+                    Text('Ingresa tus datos',
+                        style: GoogleFonts.heebo(fontSize: 20)),
+
+                    sb13,
+
+                    MyTextField(
+                      controller: rfcController,
+                      hintText: 'RFC',
+                      obscureText: false,
+                    ),
+
+                    sb13,
+
+                    //username textfield
+                    MyTextField(
+                      controller: usernameController,
+                      hintText: 'Nombre(s)',
+                      obscureText: false,
+                    ),
+
+                    sb13,
+
+                    MyTextField(
+                      controller: apellidosController,
+                      hintText: 'Apellidos',
+                      obscureText: false,
+                    ),
+
+                    sb13,
+
+                    TextFieldOpt(
+                      controller: emailController,
+                      hintText: 'Email',
+                      obscureText: false,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+
+                    sb13,
+
+                    TextFieldOpt(
+                      controller: numeroTelController,
+                      hintText: 'Número de teléfono',
+                      obscureText: false,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      keyboardType: TextInputType.phone,
+                    ),
+
+                    sb13,
+
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5.0),
+                            child: DropdownButton<String>(
+                              value: selectedOption,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedOption = newValue!;
+                                });
+                              },
+                              items: <String>[
+                                'Institución',
+                                'Empresa'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
                             ),
                           ),
                         ),
-                      ),
-                      sb10,
-        
-                      Center(
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'CITID TECNM',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.aboreto(fontSize: 38),
+                        Expanded(
+                          flex: 5,
+                          child: MyTextField(
+                            controller: institucionEmpresaController,
+                            hintText:
+                                'Nombre de la ${selectedOption.toLowerCase()}',
+                            obscureText: false,
                           ),
                         ),
-                      ),
-        
-                      sb13,
-        
-                      //(Welcome!) text
-                      Text('Ingresa tus datos',
-                          style: GoogleFonts.heebo(fontSize: 20)),
-        
-                      sb13,
-        
-                      MyTextField(
-                        controller: rfcController,
-                        hintText: 'RFC',
-                        obscureText: false,
-                      ),
-        
-                      sb13,
-        
-                      //username textfield
-                      MyTextField(
-                        controller: usernameController,
-                        hintText: 'Nombre(s)',
-                        obscureText: false,
-                      ),
-        
-                      sb13,
-        
-                      MyTextField(
-                        controller: apellidosController,
-                        hintText: 'Apellidos',
-                        obscureText: false,
-                      ),
-        
-                      sb13,
-        
-                      TextFieldOpt(
-                        controller: emailController,
-                        hintText: 'Email',
-                        obscureText: false,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-        
-                      sb13,
-        
-                      TextFieldOpt(
-                        controller: numeroTelController,
-                        hintText: 'Número de teléfono',
-                        obscureText: false,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        keyboardType: TextInputType.phone,
-                      ),
-        
-                      sb13,
-        
-                      Row(
+                      ],
+                    ),
+
+                    sb13,
+
+                    MyTextField(
+                      controller: cargoController,
+                      hintText: 'Cargo',
+                      obscureText: false,
+                    ),
+
+                    sb13,
+
+                    MyTextField(
+                      controller: passwordController,
+                      hintText: 'Contraseña',
+                      obscureText: true,
+                    ),
+
+                    sb13,
+
+                    MyTextField(
+                      controller: confirmPasController,
+                      hintText: 'Confirmación de contraseña',
+                      obscureText: true,
+                    ),
+
+                    sb25,
+
+                    //log in button
+                    MyButton(
+                      text: 'Registrarse',
+                      onTap: () {
+                        registerUserIn(context);
+                        Get.to(InicioSesion());
+                      },
+                    ),
+
+                    sb25,
+
+                    //already have an account? Log in now
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
                         children: [
                           Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: DropdownButton<String>(
-                                value: selectedOption,
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    selectedOption = newValue!;
-                                  });
-                                },
-                                items: <String>[
-                                  'Institución',
-                                  'Empresa'
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
+                            child: Divider(
+                              thickness: 0.5,
+                              color: Color.fromARGB(255, 5, 5, 5),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(
+                              '¿Ya tienes una cuenta?',
+                              style: TextStyle(
+                                  color: Color.fromARGB(183, 66, 66, 66)),
                             ),
                           ),
                           Expanded(
-                            flex: 5,
-                            child: MyTextField(
-                              controller: institucionEmpresaController,
-                              hintText:
-                                  'Nombre de la ${selectedOption.toLowerCase()}',
-                              obscureText: false,
+                            child: Divider(
+                              thickness: 0.5,
+                              color: Color.fromARGB(255, 5, 5, 5),
                             ),
                           ),
                         ],
                       ),
-        
-                      sb13,
-        
-                      MyTextField(
-                        controller: cargoController,
-                        hintText: 'Cargo',
-                        obscureText: false,
-                      ),
-        
-                      sb13,
-        
-                      MyTextField(
-                        controller: passwordController,
-                        hintText: 'Contraseña',
-                        obscureText: true,
-                      ),
-        
-                      sb13,
-        
-                      MyTextField(
-                        controller: confirmPasController,
-                        hintText: 'Confirmación de contraseña',
-                        obscureText: true,
-                      ),
-        
-                      sb25,
-        
-                      //log in button
-                      MyButton(
-                        text: 'Registrarse',
-                        onTap: () {
-                          registerUserIn(context);
-                          Get.to(InicioSesion());
-                        },
-                      ),
-        
-                      sb25,
-        
-                      //already have an account? Log in now
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                thickness: 0.5,
-                                color: Color.fromARGB(255, 5, 5, 5),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: Text(
-                                '¿Ya tienes una cuenta?',
-                                style: TextStyle(
-                                    color: Color.fromARGB(183, 66, 66, 66)),
-                              ),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                thickness: 0.5,
-                                color: Color.fromARGB(255, 5, 5, 5),
-                              ),
-                            ),
-                          ],
+                    ),
+
+                    const SizedBox(
+                      height: 20,
+                    ),
+
+                    //Register now text
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 180.0),
+                      child: Expanded(
+                        child: Divider(
+                          thickness: 0.4,
+                          color: Color.fromARGB(255, 5, 5, 5),
                         ),
                       ),
-        
-                      const SizedBox(
-                        height: 20,
-                      ),
-        
-                      //Register now text
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 180.0),
-                        child: Expanded(
-                          child: Divider(
-                            thickness: 0.4,
-                            color: Color.fromARGB(255, 5, 5, 5),
-                          ),
+                    ),
+
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to the logIn page
+                        Get.to(InicioSesion());
+                      },
+                      //GestureD is for making everythin that its inside a button
+                      child: Text(
+                        "Ingresar",
+                        style: GoogleFonts.aBeeZee(
+                          fontSize: 15,
+                          textStyle: TextStyle(
+                              color: Color.fromARGB(255, 160, 55, 29)),
                         ),
                       ),
-        
-                      GestureDetector(
-                        onTap: () {
-                          // Navigate to the logIn page
-                          Get.to(InicioSesion());
-                        },
-                        //GestureD is for making everythin that its inside a button
-                        child: Text(
-                          "Ingresar",
-                          style: GoogleFonts.aBeeZee(
-                            fontSize: 15,
-                            textStyle: TextStyle(
-                                color: Color.fromARGB(255, 160, 55, 29)),
+                    ),
+
+                    const SizedBox(
+                      height: 5,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 180.0),
+                      child: Expanded(
+                        child: Divider(
+                          thickness: 0.4,
+                          color: Color.fromARGB(255, 5, 5, 5),
                         ),
                       ),
-                      ),
-        
-                      const SizedBox(
-                        height: 5,
-                      ),
-        
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 180.0),
-                        child: Expanded(
-                          child: Divider(
-                            thickness: 0.4,
-                            color: Color.fromARGB(255, 5, 5, 5),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
+        ),
       ),
     );
   }

@@ -17,11 +17,11 @@ class _ArticleDetailState extends State<ArticleDetail> {
   late bool isAccepted;
 
   final List<String> areas = [
-    'ISC',
-    'IGE',
-    'IC',
-    'IQ',
-    'IBQ',
+    'Ingeniería en Sistemas Computacionales',
+    'Ingeniería en Gestión Empresarial',
+    'Ingeniería Civil',
+    'Ingeniería Bioquímica',
+    'Ingeniería Industrial',
   ];
   final List<String> themes = [
     'Desarrollo de aplicaciones',
@@ -32,11 +32,15 @@ class _ArticleDetailState extends State<ArticleDetail> {
     'Organic Chemistry'
   ];
   final Map<String, List<String>> reviewers = {
-    'ISC': ['Mario Humberto', 'Pedro Aragón', 'Javcer Cartujano'],
-    'IGE': ['PROFE1', 'Profe2'],
-    'IC': ['PROFE3', 'Profe4'],
-    'IQ': ['PROFE5', 'Profe6'],
-    'IBQ': ['PROFE7', 'Profe8'],
+    'Ingeniería en Sistemas Computacionales': [
+      'Mario Humberto',
+      'Pedro Aragón',
+      'Javcer Cartujano'
+    ],
+    'Ingeniería en Gestión Empresarial': ['PROFE1', 'Profe2'],
+    'Ingeniería Civil': ['PROFE3', 'Profe4'],
+    'Ingeniería Bioquímica': ['PROFE5', 'Profe6'],
+    'Ingeniería Industrial': ['PROFE7', 'Profe8'],
   };
 
   @override

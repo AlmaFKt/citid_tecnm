@@ -3,6 +3,7 @@ import 'package:citid_tecnm/Sesiones/registros/MainRegistro.dart';
 import 'package:citid_tecnm/componentes/Theme.dart';
 import 'package:citid_tecnm/componentes/boton.dart';
 import 'package:citid_tecnm/componentes/widgets.dart';
+import 'package:citid_tecnm/content/PonentePage.dart';
 import 'package:citid_tecnm/content/programa.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     IconButton(
                       icon: Icon(Icons.home, color: blanco),
-                      onPressed: () => Get.to(HomePage()),
+                      onPressed: () => Get.to(Ponentepage()),
                     ),
                     IconButton(
                       icon: Icon(Icons.info_outline, color: blanco),
@@ -171,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                       ListTile(
                         leading: Icon(Icons.home),
                         title: Text('Inicio'),
-                        onTap: () => Get.to(HomePage()),
+                        onTap: () => Get.to(Ponentepage()),
                       ),
                       ListTile(
                         leading: Icon(Icons.info_outline),

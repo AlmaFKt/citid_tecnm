@@ -42,8 +42,34 @@ class _RevisorWorkspaceState extends State<RevisorWorkspace> {
     },
   ];
 
+  bool _showPendingOnly = false;
+  final TextEditingController _filterController = TextEditingController();
+
+  void _toggleFilter() {
+    setState(() {
+      _showPendingOnly = !_showPendingOnly;
+    });
+  }
+
+  List<Map<String, dynamic>> get _filteredArticulos {
+    List<Map<String, dynamic>> filteredList = _articulos;
+    if (_showPendingOnly) {
+      filteredList = filteredList
+          .where((articulo) => articulo['estado'] == 'Pendiente')
+          .toList();
+    }
+    if (_filterController.text.isNotEmpty) {
+      filteredList = filteredList.where((articulo) {
+        return articulo['titulo']
+            .toLowerCase()
+            .contains(_filterController.text.toLowerCase());
+      }).toList();
+    }
+    return filteredList;
+  }
+
   void _evaluarArticulo(int index) {
-    Get.to(() => ArticleReviewWorkspace(article: _articulos[index]));
+    Get.to(() => ArticleReviewWorkspace(article: _filteredArticulos[index]));
   }
 
   void _toggleAceptado(int index) {
@@ -60,72 +86,117 @@ class _RevisorWorkspaceState extends State<RevisorWorkspace> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: blanco,
-      appBar: myAppBar,
+      appBar: AppBar(
+        backgroundColor: azulClaro,
+        title: Text('Workspace de Revisor'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Tooltip(
+              message: _showPendingOnly
+                  ? 'Mostrar todos los artículos'
+                  : 'Mostrar solo artículos pendientes',
+              child: IconButton(
+                icon: Icon(
+                    _showPendingOnly ? Icons.filter_alt_off : Icons.filter_alt),
+                onPressed: _toggleFilter,
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Center(
         child: Container(
           constraints: BoxConstraints(maxWidth: 750),
-          child: ListView.builder(
-            itemCount: _articulos.length,
-            itemBuilder: (context, index) {
-              var articulo = _articulos[index];
-              return Container(
-                constraints: BoxConstraints(maxWidth: 600),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: azulITZ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          articulo['autores'],
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          articulo['titulo'],
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Estado: ${articulo['estado']}'),
-                            ElevatedButton(
-                              child: Text('Evaluar'),
-                              onPressed: () => _evaluarArticulo(index),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ElevatedButton(
-                              child: Text('Descargar PDF'),
-                              onPressed: _descargarPDF,
-                            ),
-                            Row(
-                              children: [
-                                Text('Aceptado: '),
-                                Switch(
-                                  value: articulo['aceptado'] ?? false,
-                                  onChanged: (value) => _toggleAceptado(index),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _filterController,
+                  decoration: InputDecoration(
+                    labelText: 'Buscar artículos',
+                    hintText: 'Ingrese el título del artículo',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
+                  onChanged: (value) {
+                    setState(() {});
+                  },
                 ),
-              );
-            },
+              ),
+              sb5,
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _filteredArticulos.length,
+                  itemBuilder: (context, index) {
+                    var articulo = _filteredArticulos[index];
+                    return Container(
+                      constraints: BoxConstraints(maxWidth: 750),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(color: azulITZ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                articulo['autores'],
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                articulo['titulo'],
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Estado: ${articulo['estado']}'),
+                                  ElevatedButton(
+                                    child: Text('Evaluar'),
+                                    onPressed: () => _evaluarArticulo(index),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ElevatedButton(
+                                    child: Text('Descargar PDF'),
+                                    onPressed: _descargarPDF,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text('Aceptado: '),
+                                      Switch(
+                                        value: articulo['aceptado'] ?? false,
+                                        onChanged: (value) =>
+                                            _toggleAceptado(index),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),
