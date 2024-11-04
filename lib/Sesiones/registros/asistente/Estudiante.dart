@@ -1,5 +1,6 @@
 import 'package:citid_tecnm/Sesiones/InicioSesion.dart';
 import 'package:citid_tecnm/componentes/widgets.dart';
+import 'package:citid_tecnm/content/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,19 +32,19 @@ class _AsistentePageState extends State<AsistentePage> {
   final numeroTelController = TextEditingController();
   final carreraController = TextEditingController();
 
-  void updateUserName(String newName) async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      try {
-        await user.updateDisplayName(newName);
-        user = FirebaseAuth.instance.currentUser; // Refresh the user object
-        print("User display name updated: ${user?.displayName}");
-      } catch (e) {
-        print("Error updating user display name: $e");
-      }
-    }
-  }
+  Map<String, String> carrera = {
+    'ISC': 'Ingeniería en Sistemas Computacionales',
+    'IIN': 'Ingeniería Industrial',
+    'IQ': 'Ingeniería Química',
+    'IGE': 'Ingeniería en Gestión Empresarial',
+    'IBQ': 'Ingeniería Bioquímica',
+    'CB': 'Ciencias Básicas',
+    'IA': 'Ingeniería en Administración de Empresas',
+    'IE': 'Ingeniería Electromecánica',
+    'IC': 'Ingeniería Civil',
+    'MC': 'Maestría en Ciencias',
+    'MP': 'Maestría en Procesos'
+  };
 
   //register user in method event
   void registerUserIn(BuildContext context) async {
@@ -78,6 +79,8 @@ class _AsistentePageState extends State<AsistentePage> {
 
       // Guardar los datos del usuario en Firestore
       await FirebaseFirestore.instance
+          .collection('Registros')
+          .doc('Asistente')
           .collection('Estudiante')
           .doc(userCredential.user!.uid)
           .set({
@@ -86,23 +89,19 @@ class _AsistentePageState extends State<AsistentePage> {
         'Apellidos': apellidosController.text,
         'Num. teléfono': numeroTelController.text,
         'Carrera': carreraController.text,
+        'UserType': 'Estudiante',
       });
 
       // Cerrar el diálogo de carga
       Navigator.of(context).pop();
 
-      // Mostrar mensaje de éxito
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Usuario registrado exitosamente"),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      // Redirigir al usuario a la página de inicio
+      Get.offAll(() => HomePage());
     } catch (e) {
       // Cerrar el diálogo de carga en caso de error
       Navigator.of(context).pop();
 
-      print("Error al registrar el usuario: $e");
+      // Mostrar mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Error al registrar el usuario: $e"),
@@ -131,7 +130,7 @@ class _AsistentePageState extends State<AsistentePage> {
                         alignment: Alignment.topLeft,
                         child: IconButton(
                           onPressed: () {
-                            Get.to(InicioSesion());
+                            Get.to(HomePage());
                           },
                           icon: const Icon(
                             Icons.arrow_back,
@@ -234,10 +233,7 @@ class _AsistentePageState extends State<AsistentePage> {
                     //log in button
                     MyButton(
                       text: 'Registrarse',
-                      onTap: () {
-                        registerUserIn(context);
-                        Get.to(InicioSesion());
-                      },
+                      onTap: () => registerUserIn(context),
                     ),
 
                     sb25,

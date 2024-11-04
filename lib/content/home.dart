@@ -5,6 +5,7 @@ import 'package:citid_tecnm/componentes/boton.dart';
 import 'package:citid_tecnm/componentes/widgets.dart';
 import 'package:citid_tecnm/content/PonentePage.dart';
 import 'package:citid_tecnm/content/programa.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -51,6 +52,94 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _calendarController = CalendarController();
     _initializeAppointments();
+  }
+
+  void _checkUserStatus(BuildContext context) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        String userType = await _getUserType(user);
+        print('User type: $userType'); // Debug message
+        if (userType == 'Ponente') {
+          Get.off(() => Ponentepage());
+        } else if (userType == 'Revisor') {
+          Get.off(() => ListaArticulos());
+        } else if (userType == 'Estudiante') {
+          Get.off(() => Ponentepage());
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Unknown user type')),
+          );
+        }
+      } else {
+        Get.off(() => InicioSesion());
+      }
+    } catch (e) {
+      print('Error checking user status: $e'); // Debug message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error checking user status: $e')),
+      );
+    }
+  }
+
+  Future<String> _getUserType(User user) async {
+    // Check if user is a Ponente
+    DocumentSnapshot ponenteDoc = await FirebaseFirestore.instance
+        .collection('Registros')
+        .doc('Ponente')
+        .collection('Ponentes') // Add a subcollection
+        .doc(user.uid)
+        .get();
+    if (ponenteDoc.exists) {
+      return 'Ponente';
+    }
+
+    // Check if user is a Revisor
+    DocumentSnapshot revisorDoc = await FirebaseFirestore.instance
+        .collection('Registros')
+        .doc('RevisorInterno')
+        .collection('Revisores') // Add a subcollection
+        .doc(user.uid)
+        .get();
+    if (revisorDoc.exists) {
+      return 'Revisor';
+    }
+
+    // Check if user is an Estudiante
+    DocumentSnapshot estudianteDoc = await FirebaseFirestore.instance
+        .collection('Registros')
+        .doc('Asistente')
+        .collection('Estudiante')
+        .doc(user.uid)
+        .get();
+    if (estudianteDoc.exists) {
+      print('User is an Estudiante');
+      return 'Estudiante';
+    }
+
+    // Check if user is an Empleado
+    DocumentSnapshot empleadoDoc = await FirebaseFirestore.instance
+        .collection('Registros')
+        .doc('Asistente')
+        .collection('Empleado')
+        .doc(user.uid)
+        .get();
+    if (empleadoDoc.exists) {
+      return 'Empleado';
+    }
+
+    // Check if user is Externo
+    DocumentSnapshot externoDoc = await FirebaseFirestore.instance
+        .collection('Registros')
+        .doc('Asistente')
+        .collection('Externo')
+        .doc(user.uid)
+        .get();
+    if (externoDoc.exists) {
+      return 'Externo';
+    }
+
+    return 'Unknown';
   }
 
   void _initializeAppointments() {
@@ -136,11 +225,7 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                       icon: Icon(Icons.account_circle_outlined, color: blanco),
                       onPressed: () {
-                        if (FirebaseAuth.instance.currentUser != null) {
-                          Get.to(SubirArchivo());
-                        } else {
-                          Get.to(InicioSesion());
-                        }
+                        _checkUserStatus(context);
                       },
                     ),
                     IconButton(
@@ -188,9 +273,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                       ListTile(
                         leading: Icon(Icons.account_circle_outlined),
-                        title: Text('Registro'),
+                        title: Text('Usuario'),
                         onTap: () {
-                          Get.to(InicioSesion());
+                          _checkUserStatus(context);
                         },
                       ),
                       ListTile(
