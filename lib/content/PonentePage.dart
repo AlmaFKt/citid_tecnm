@@ -266,8 +266,258 @@ class ObservationsSection extends StatelessWidget {
 }
 
 // lib/screens/accepted_section.dart
-class AcceptedSection extends StatelessWidget {
+class AcceptedSection extends StatefulWidget {
   const AcceptedSection({super.key});
+
+  @override
+  State<AcceptedSection> createState() => _AcceptedSectionState();
+}
+ bool termsAccepted = false;
+
+ void _showTermsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Términos y Condiciones'),
+          content: SingleChildScrollView(
+            child: Text(
+              'Aquí van los términos y condiciones...',
+              // Add your terms and conditions text here
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  termsAccepted = true;
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text('Aceptar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancelar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+class _AcceptedSectionState extends State<AcceptedSection> {
+  bool termsAccepted = false;
+
+  void _showTermsDialog() {
+    bool localTermsAccepted = termsAccepted;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Términos y Condiciones'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Al aceptar estos términos y condiciones, usted reconoce y acepta que:\n\n'
+                      '1. La información proporcionada es verídica y precisa.\n'
+                      '2. El artículo presentado es original y de su autoría.\n'
+                      '3. Acepta las normas y lineamientos del congreso.\n'
+                      '4. Autoriza la publicación de su trabajo en las memorias del evento.\n'
+                      '5. Se compromete a realizar su presentación en el horario asignado.\n\n'
+                      'El incumplimiento de estos términos puede resultar en la cancelación de su participación.',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: localTermsAccepted,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              localTermsAccepted = value ?? false;
+                            });
+                          },
+                        ),
+                        const Expanded(
+                          child: Text(
+                            'He leído y acepto los términos y condiciones',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancelar'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (localTermsAccepted) {
+                      this.setState(() {
+                        termsAccepted = true;
+                      });
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Debes aceptar los términos y condiciones para continuar.',
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Aceptar'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Sección de Baucher
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Comprobante de Pago',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      // Implementar carga de baucher
+                    },
+                    icon: const Icon(Icons.upload_file),
+                    label: const Text('Subir Baucher'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Sección de Semblanza
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Semblanza del Autor',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const TextField(
+                    maxLines: 5,
+                    maxLength: 150,
+                    decoration: InputDecoration(
+                      labelText: 'Semblanza (150 palabras)',
+                      border: OutlineInputBorder(),
+                      hintText: 'Escriba una breve descripción de su trayectoria académica...',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Sección de Términos y Condiciones
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Términos y Condiciones',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  CheckboxListTile(
+                    title: const Text('Acepto los términos y condiciones'),
+                    subtitle: const Text('Haga clic para leer los términos completos'),
+                    value: termsAccepted,
+                    onChanged: (bool? value) {
+                      if (value == true) {
+                        _showTermsDialog();
+                      } else {
+                        setState(() {
+                          termsAccepted = false;
+                        });
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Botón de envío
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: termsAccepted
+                  ? () {
+                      // Implementar envío de formulario
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Formulario enviado correctamente'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
+                  : null,
+              icon: const Icon(Icons.send),
+              label: const Text('Enviar Formulario'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -295,9 +545,15 @@ class AcceptedSection extends StatelessWidget {
           const SizedBox(height: 20),
           CheckboxListTile(
             title: const Text('Acepto los términos y condiciones'),
-            value: false,
+            value: termsAccepted,
             onChanged: (bool? value) {
-              // Implementar aceptación de términos
+              if (value == true) {
+                _showTermsDialog();
+              } else {
+                setState(() {
+                  termsAccepted = false;
+                });
+              }
             },
           ),
           const SizedBox(height: 20),

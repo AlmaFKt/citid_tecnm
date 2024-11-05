@@ -30,7 +30,10 @@ class _ProgramaEventoState extends State<ProgramaEvento>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Programa del Evento'),
+        title: Text(
+          'Programa del Evento',
+          style: TextStyle(color: blanco),
+        ),
         backgroundColor: azulOscuro,
       ),
       body: Column(

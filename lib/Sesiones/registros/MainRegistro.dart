@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../componentes/Theme.dart';
 import '../../componentes/boton.dart';
 import 'RegistroPonente.dart';
+import 'RegistroRevInter.dart';
 import 'asistente/MainAsistente.dart';
 
 class Mainregistro extends StatefulWidget {
@@ -60,7 +61,7 @@ class _MainregistroState extends State<Mainregistro> {
                         MyButton(
                           text: 'Revisor interno',
                           onTap: () {
-                            Get.to(RegisterPage());
+                            Get.to(RevInterno());
                           },
                         ),
                       ],

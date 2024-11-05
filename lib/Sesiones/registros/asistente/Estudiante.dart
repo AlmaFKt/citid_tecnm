@@ -12,8 +12,7 @@ import '../../../componentes/boton.dart';
 import '../../../componentes/textfield.dart';
 import '../../../componentes/textfieldOpt.dart';
 
-//PONENTES
-
+//Estudiante page
 class AsistentePage extends StatefulWidget {
   AsistentePage({super.key});
 
@@ -46,6 +45,8 @@ class _AsistentePageState extends State<AsistentePage> {
     'MP': 'Maestría en Procesos'
   };
 
+  String? selectedCarrera;
+
   //register user in method event
   void registerUserIn(BuildContext context) async {
     try {
@@ -54,13 +55,22 @@ class _AsistentePageState extends State<AsistentePage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Las contraseñas no coinciden"),
-            duration: Duration(seconds: 2),
+            duration: Duration(seconds: 3),
           ),
         );
         return;
       }
 
-      // Mostrar indicador de carga
+      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(emailController.text)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Correo electrónico no válido"),
+            duration: Duration(seconds: 3),
+          ),
+        );
+        return;
+      }
+
       showDialog(
         context: context,
         builder: (context) {
@@ -105,7 +115,7 @@ class _AsistentePageState extends State<AsistentePage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Error al registrar el usuario: $e"),
-          duration: Duration(seconds: 2),
+          duration: Duration(seconds: 3),
         ),
       );
     }
@@ -130,7 +140,7 @@ class _AsistentePageState extends State<AsistentePage> {
                         alignment: Alignment.topLeft,
                         child: IconButton(
                           onPressed: () {
-                            Get.to(HomePage());
+                            Get.offAll(HomePage());
                           },
                           icon: const Icon(
                             Icons.arrow_back,
@@ -206,12 +216,40 @@ class _AsistentePageState extends State<AsistentePage> {
 
                     sb13,
 
-                    MyTextField(
-                      controller: carreraController,
-                      hintText: 'Carrera',
-                      obscureText: false,
+                    Container(
+                      constraints: BoxConstraints(
+                        maxWidth: 650,
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        value: selectedCarrera,
+                        hint: Text('Selecciona tu carrera'),
+                        items: carrera.entries.map((entry) {
+                          return DropdownMenuItem<String>(
+                            value: entry.key,
+                            child: Text(entry.value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedCarrera = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 9, 20, 43)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 0, 4, 12)),
+                          ),
+                          fillColor: Color.fromARGB(192, 221, 227, 240),
+                          filled: true,
+                          hintStyle: TextStyle(
+                              color: Color.fromARGB(211, 146, 145, 145)),
+                        ),
+                      ),
                     ),
-
                     sb13,
 
                     MyTextField(
@@ -272,10 +310,8 @@ class _AsistentePageState extends State<AsistentePage> {
 
                     GestureDetector(
                       onTap: () {
-                        // Navigate to the logIn page
                         Get.to(InicioSesion());
                       },
-                      //GestureD is for making everythin that its inside a button
                       child: Text(
                         "Ingresar",
                         style: GoogleFonts.aBeeZee(

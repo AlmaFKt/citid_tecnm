@@ -9,6 +9,7 @@ import '../../../componentes/Theme.dart';
 import '../../../componentes/boton.dart';
 import '../../../componentes/textfield.dart';
 import '../../../componentes/textfieldOpt.dart';
+import '../../../content/home.dart';
 
 //Externo
 
@@ -32,20 +33,6 @@ class _ExternoPageState extends State<ExternoPage> {
   final cargoController = TextEditingController();
   String selectedOption = 'Institución';
 
-  void updateUserName(String newName) async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      try {
-        await user.updateDisplayName(newName);
-        user = FirebaseAuth.instance.currentUser; // Refresh the user object
-        print("User display name updated: ${user?.displayName}");
-      } catch (e) {
-        print("Error updating user display name: $e");
-      }
-    }
-  }
-
   //register user in method event
   void registerUserIn(BuildContext context) async {
     try {
@@ -54,6 +41,16 @@ class _ExternoPageState extends State<ExternoPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Las contraseñas no coinciden"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        return;
+      }
+
+      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(emailController.text)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Correo electrónico no válido"),
             duration: Duration(seconds: 2),
           ),
         );
@@ -79,7 +76,9 @@ class _ExternoPageState extends State<ExternoPage> {
 
       // Guardar los datos del usuario en Firestore
       await FirebaseFirestore.instance
-          .collection('Ponentes')
+          .collection('Registros')
+          .doc('Asistente')
+          .collection('Externo')
           .doc(userCredential.user!.uid)
           .set({
         'RFC': rfcController.text,
@@ -88,6 +87,7 @@ class _ExternoPageState extends State<ExternoPage> {
         'Num. teléfono': numeroTelController.text,
         selectedOption: institucionEmpresaController.text,
         'Cargo': cargoController.text,
+        'UserType': 'Externo',
       });
 
       // Cerrar el diálogo de carga
@@ -97,18 +97,19 @@ class _ExternoPageState extends State<ExternoPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Usuario registrado exitosamente"),
-          duration: Duration(seconds: 2),
+          duration: Duration(seconds: 3),
         ),
       );
+      Get.offAll(() => HomePage());
     } catch (e) {
       // Cerrar el diálogo de carga en caso de error
       Navigator.of(context).pop();
 
-      print("Error al registrar el usuario: $e");
+      // Mostrar mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Error al registrar el usuario: $e"),
-          duration: Duration(seconds: 2),
+          duration: Duration(seconds: 3),
         ),
       );
     }
@@ -209,41 +210,44 @@ class _ExternoPageState extends State<ExternoPage> {
 
                     sb13,
 
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: DropdownButton<String>(
-                              value: selectedOption,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedOption = newValue!;
-                                });
-                              },
-                              items: <String>[
-                                'Institución',
-                                'Empresa'
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
+                    Container(
+                      constraints: BoxConstraints(maxWidth: 650),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: DropdownButton<String>(
+                                value: selectedOption,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedOption = newValue!;
+                                  });
+                                },
+                                items: <String>[
+                                  'Institución',
+                                  'Empresa'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: MyTextField(
-                            controller: institucionEmpresaController,
-                            hintText:
-                                'Nombre de la ${selectedOption.toLowerCase()}',
-                            obscureText: false,
+                          Expanded(
+                            flex: 5,
+                            child: MyTextField(
+                              controller: institucionEmpresaController,
+                              hintText:
+                                  'Nombre de la ${selectedOption.toLowerCase()}',
+                              obscureText: false,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
 
                     sb13,
@@ -275,10 +279,7 @@ class _ExternoPageState extends State<ExternoPage> {
                     //log in button
                     MyButton(
                       text: 'Registrarse',
-                      onTap: () {
-                        registerUserIn(context);
-                        Get.to(InicioSesion());
-                      },
+                      onTap: () => registerUserIn(context),
                     ),
 
                     sb25,

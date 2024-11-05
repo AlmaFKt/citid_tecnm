@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:citid_tecnm/Sesiones/registros/MainRegistro.dart';
 import 'package:citid_tecnm/componentes/Theme.dart';
 import 'package:citid_tecnm/componentes/boton.dart';
 import 'package:citid_tecnm/componentes/widgets.dart';
 import 'package:citid_tecnm/content/PonentePage.dart';
+import 'package:citid_tecnm/content/asistentePage.dart';
 import 'package:citid_tecnm/content/programa.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,9 +12,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../Sesiones/InicioSesion.dart';
-import '../revisiones/depi/lista_articulos.dart';
+import '../Sesiones/registros/MainRegistro.dart';
 import '../revisiones/ponente/subir_archivo.dart';
 import '../revisiones/revisor/lista_articulos_rev.dart';
+import 'ContactoPage.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -59,13 +60,17 @@ class _HomePageState extends State<HomePage> {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         String userType = await _getUserType(user);
-        print('User type: $userType'); // Debug message
+        print('User type: $userType');
         if (userType == 'Ponente') {
           Get.off(() => Ponentepage());
-        } else if (userType == 'Revisor') {
-          Get.off(() => ListaArticulos());
+        } else if (userType == 'RevInterno') {
+          Get.off(() => RevisorWorkspace());
         } else if (userType == 'Estudiante') {
-          Get.off(() => Ponentepage());
+          Get.off(() => PerfilAsistentePage());
+        } else if (userType == 'Empleado') {
+          Get.off(() => PerfilAsistentePage());
+        } else if (userType == 'Externo') {
+          Get.off(() => PerfilAsistentePage());
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Unknown user type')),
@@ -75,7 +80,7 @@ class _HomePageState extends State<HomePage> {
         Get.off(() => InicioSesion());
       }
     } catch (e) {
-      print('Error checking user status: $e'); // Debug message
+      print('Error checking user status: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error checking user status: $e')),
       );
@@ -83,29 +88,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<String> _getUserType(User user) async {
-    // Check if user is a Ponente
     DocumentSnapshot ponenteDoc = await FirebaseFirestore.instance
         .collection('Registros')
         .doc('Ponente')
-        .collection('Ponentes') // Add a subcollection
+        .collection('Ponentes')
         .doc(user.uid)
         .get();
     if (ponenteDoc.exists) {
       return 'Ponente';
     }
 
-    // Check if user is a Revisor
+    // DONE
     DocumentSnapshot revisorDoc = await FirebaseFirestore.instance
         .collection('Registros')
         .doc('RevisorInterno')
-        .collection('Revisores') // Add a subcollection
+        .collection('Revisores')
         .doc(user.uid)
         .get();
     if (revisorDoc.exists) {
-      return 'Revisor';
+      return 'RevInterno';
     }
-
-    // Check if user is an Estudiante
+// DONE
     DocumentSnapshot estudianteDoc = await FirebaseFirestore.instance
         .collection('Registros')
         .doc('Asistente')
@@ -113,11 +116,9 @@ class _HomePageState extends State<HomePage> {
         .doc(user.uid)
         .get();
     if (estudianteDoc.exists) {
-      print('User is an Estudiante');
       return 'Estudiante';
     }
-
-    // Check if user is an Empleado
+// DONE
     DocumentSnapshot empleadoDoc = await FirebaseFirestore.instance
         .collection('Registros')
         .doc('Asistente')
@@ -127,8 +128,7 @@ class _HomePageState extends State<HomePage> {
     if (empleadoDoc.exists) {
       return 'Empleado';
     }
-
-    // Check if user is Externo
+// DONE
     DocumentSnapshot externoDoc = await FirebaseFirestore.instance
         .collection('Registros')
         .doc('Asistente')
@@ -219,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                       icon: Icon(Icons.calendar_month, color: blanco),
                       onPressed: () {
-                        Get.to(RevisorWorkspace());
+                        Get.to(ProgramaEvento());
                       },
                     ),
                     IconButton(
@@ -231,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                       icon: Icon(Icons.contact_page, color: blanco),
                       onPressed: () {
-                        Get.to(ListaArticulos());
+                        Get.to(ContactoPage());
                       },
                     )
                   ],
@@ -281,7 +281,9 @@ class _HomePageState extends State<HomePage> {
                       ListTile(
                         leading: Icon(Icons.contact_page),
                         title: Text('Contacto'),
-                        onTap: () {},
+                        onTap: () {
+                          Get.to(ContactoPage());
+                        },
                       ),
                       divider,
                       ListTile(
