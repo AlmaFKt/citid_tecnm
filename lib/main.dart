@@ -1,5 +1,6 @@
 import 'package:citid_tecnm/content/home.dart';
 import 'package:citid_tecnm/firebase_options.dart';
+import 'package:citid_tecnm/revisiones/ponente/subir_archivo.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'CITID',
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: SubirArchivo(),
     );
   }
 }

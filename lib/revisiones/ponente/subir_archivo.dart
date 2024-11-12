@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'package:citid_tecnm/componentes/Theme.dart';
 import 'package:citid_tecnm/componentes/boton.dart';
 import 'package:citid_tecnm/componentes/textfieldLabel.dart';
 import 'package:citid_tecnm/componentes/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class SubirArchivo extends StatefulWidget {
@@ -16,6 +19,7 @@ class _SubirArchivoState extends State<SubirArchivo> {
   String? _areaSeleccionada;
   String? _temaSeleccionado;
   String? _nombreArchivo;
+  String? _filePath;
 
   final TextEditingController _tituloController = TextEditingController();
 
@@ -76,24 +80,51 @@ class _SubirArchivoState extends State<SubirArchivo> {
     if (result != null) {
       setState(() {
         _nombreArchivo = result.files.single.name;
+        _filePath = result.files.single.path;
       });
     }
   }
 
-  void _enviar() {
+  Future<void> _enviar() async {
     if (_nombreArchivo != null &&
-        _tituloController.text.isNotEmpty &&
+        _tituloController.text.isEmpty &&
         _areaSeleccionada != null &&
-        _temaSeleccionado != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('¡Articulo subido correctamente!')),
-      );
+        _temaSeleccionado != null &&
+        _filePath != null) {
+      try {
+        // Upload file to Firebase Storage
+        File file = File(_filePath!);
+        String fileName = _nombreArchivo!;
+        Reference storageRef = FirebaseStorage.instance.ref().child('uploads/$fileName');
+        UploadTask uploadTask = storageRef.putFile(file);
+        TaskSnapshot taskSnapshot = await uploadTask;
+
+        // Get the download URL
+        String downloadURL = await taskSnapshot.ref.getDownloadURL();
+
+        // Save metadata to Firestore
+        await FirebaseFirestore.instance.collection('articulos').add({
+          'titulo': _tituloController.text,
+          'area': _areaSeleccionada,
+          'tema': _temaSeleccionado,
+          'fileURL': downloadURL,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('¡Articulo subido correctamente!')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al subir el artículo: $e')),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Por favor, llenar todos los campos')),
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +153,7 @@ class _SubirArchivoState extends State<SubirArchivo> {
                         child: Text('Elegir archivo'),
                       ),
                     ),
+                    
                     Expanded(
                       child: Text(
                         _nombreArchivo ?? 'Ningún archivo seleccionado',
@@ -132,47 +164,37 @@ class _SubirArchivoState extends State<SubirArchivo> {
                   ],
                 ),
                 sb25,
-                MyLabeledField(
-                    labelText: 'Título del artículo',
-                    controller: _tituloController),
-                sb25,
-                DropdownButtonFormField<String>(
+                DropdownButton<String>(
                   value: _areaSeleccionada,
-                  items: _areaTemas.keys.map((String area) {
-                    return DropdownMenuItem<String>(
-                      value: area,
-                      child: Text(area),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
+                  hint: Text('Seleccionar Área'),
+                  onChanged: (String? newValue) {
                     setState(() {
                       _areaSeleccionada = newValue;
                       _temaSeleccionado = null;
                     });
                   },
-                  decoration: InputDecoration(
-                    labelText: 'Area',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                sb25,
-                DropdownButtonFormField<String>(
-                  value: _temaSeleccionado,
-                  items: _themes.map((String theme) {
+                  items: _areaTemas.keys.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
-                      value: theme,
-                      child: Text(theme),
+                      value: value,
+                      child: Text(value),
                     );
                   }).toList(),
-                  onChanged: (newValue) {
+                ),
+                sb25,
+                DropdownButton<String>(
+                  value: _temaSeleccionado,
+                  hint: Text('Seleccionar Tema'),
+                  onChanged: (String? newValue) {
                     setState(() {
                       _temaSeleccionado = newValue;
                     });
                   },
-                  decoration: InputDecoration(
-                    labelText: 'Tematica',
-                    border: OutlineInputBorder(),
-                  ),
+                  items: _themes.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                 ),
                 sb25,
                 Center(child: MyButton(text: 'Enviar', onTap: _enviar)),

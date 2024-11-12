@@ -5,6 +5,7 @@ import 'package:citid_tecnm/componentes/widgets.dart';
 import 'package:citid_tecnm/content/PonentePage.dart';
 import 'package:citid_tecnm/content/asistentePage.dart';
 import 'package:citid_tecnm/content/programa.dart';
+import 'package:citid_tecnm/revisiones/depi/lista_articulos.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,8 @@ class _HomePageState extends State<HomePage> {
           Get.off(() => Ponentepage());
         } else if (userType == 'RevInterno') {
           Get.off(() => RevisorWorkspace());
+          } else if (userType == 'Depi') {
+          Get.off(() => ListaArticulos());
         } else if (userType == 'Estudiante') {
           Get.off(() => PerfilAsistentePage());
         } else if (userType == 'Empleado') {
@@ -107,6 +110,16 @@ class _HomePageState extends State<HomePage> {
         .get();
     if (revisorDoc.exists) {
       return 'RevInterno';
+    }
+
+    DocumentSnapshot depiDoc = await FirebaseFirestore.instance
+        .collection('Registros')
+        .doc('Depi')
+        .collection('depis')
+        .doc(user.uid)
+        .get();
+    if (depiDoc.exists) {
+      return 'Depi';
     }
 // DONE
     DocumentSnapshot estudianteDoc = await FirebaseFirestore.instance

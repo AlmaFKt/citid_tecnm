@@ -6,21 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../componentes/Theme.dart';
-import '../../componentes/boton.dart';
-import '../../componentes/textfield.dart';
-import '../../componentes/textfieldOpt.dart';
+import '../../../componentes/Theme.dart';
+import '../../../componentes/boton.dart';
+import '../../../componentes/textfield.dart';
+import '../../../componentes/textfieldOpt.dart';
 
-//PONENTES
+//Empleado
 
-class RegisterPage extends StatefulWidget {
-  RegisterPage({super.key});
+class Depi extends StatefulWidget {
+  Depi({super.key});
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _DepiState createState() => _DepiState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _DepiState extends State<Depi> {
   //Text editing controllers
   final usernameController = TextEditingController();
   final apellidosController = TextEditingController();
@@ -29,9 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final rfcController = TextEditingController();
   final numeroTelController = TextEditingController();
-  final institucionEmpresaController = TextEditingController();
-  final cargoController = TextEditingController();
-  String selectedOption = 'Institución';
+  final carreraController = TextEditingController();
 
   //register user in method event
   void registerUserIn(BuildContext context) async {
@@ -51,7 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Correo electrónico no válido"),
-            duration: Duration(seconds: 3),
+            duration: Duration(seconds: 2),
           ),
         );
         return;
@@ -77,18 +75,16 @@ class _RegisterPageState extends State<RegisterPage> {
       // Guardar los datos del usuario en Firestore
       await FirebaseFirestore.instance
           .collection('Registros')
-          .doc('Ponente')
-          .collection('Ponentes')
+          .doc('Depi')
+          .collection('Depis')
           .doc(userCredential.user!.uid)
           .set({
-        'email': emailController,
         'RFC': rfcController.text,
         'Nombre(s)': usernameController.text,
         'Apellidos': apellidosController.text,
         'Num. teléfono': numeroTelController.text,
-        selectedOption: institucionEmpresaController.text,
-        'Cargo': cargoController.text,
-        'UserType': 'Ponente',
+        'Área de Adscripción': carreraController.text,
+        'UserType': 'Depi',
       });
 
       // Cerrar el diálogo de carga
@@ -204,51 +200,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
                     sb13,
 
-                    Container(
-                      constraints: BoxConstraints(maxWidth: 680),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: DropdownButton<String>(
-                                value: selectedOption,
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    selectedOption = newValue!;
-                                  });
-                                },
-                                items: <String>[
-                                  'Institución',
-                                  'Empresa'
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: MyTextField(
-                              controller: institucionEmpresaController,
-                              hintText:
-                                  'Nombre de la ${selectedOption.toLowerCase()}',
-                              obscureText: false,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    sb13,
-
                     MyTextField(
-                      controller: cargoController,
-                      hintText: 'Cargo',
+                      controller: carreraController,
+                      hintText: 'Área de adscripción',
                       obscureText: false,
                     ),
 
@@ -277,81 +231,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
 
                     sb25,
-
-                    //already have an account? Log in now
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.5,
-                              color: Color.fromARGB(255, 5, 5, 5),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Text(
-                              '¿Ya tienes una cuenta?',
-                              style: TextStyle(
-                                  color: Color.fromARGB(183, 66, 66, 66)),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.5,
-                              color: Color.fromARGB(255, 5, 5, 5),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(
-                      height: 20,
-                    ),
-
-                    //Register now text
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 180.0),
-                      child: Expanded(
-                        child: Divider(
-                          thickness: 0.4,
-                          color: Color.fromARGB(255, 5, 5, 5),
-                        ),
-                      ),
-                    ),
-
-                    GestureDetector(
-                      onTap: () {
-                        // Navigate to the logIn page
-                        Get.to(InicioSesion());
-                      },
-                      //GestureD is for making everythin that its inside a button
-                      child: Text(
-                        "Ingresar",
-                        style: GoogleFonts.aBeeZee(
-                          fontSize: 15,
-                          textStyle: TextStyle(
-                              color: Color.fromARGB(255, 160, 55, 29)),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(
-                      height: 5,
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 180.0),
-                      child: Expanded(
-                        child: Divider(
-                          thickness: 0.4,
-                          color: Color.fromARGB(255, 5, 5, 5),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
