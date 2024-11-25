@@ -29,8 +29,27 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>citid_tecnm</title>
+  <title>Citid</title>
   <link rel="manifest" href="manifest.json">
+
+    <!-- Add these before your Flutter script -->
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-storage.js"></script>
+    
+    <script>
+      const firebaseConfig = {
+        apiKey: 'AIzaSyBX2ISUqqPfROOCGog_z59S8eJ5Ouwa-Xw',
+      appId: '1:179217794792:web:77d8d0bbcb9c1885c4eb5d',
+      messagingSenderId: '179217794792',
+      projectId: 'citiditzacatepec',
+      authDomain: 'citiditzacatepec.firebaseapp.com',
+      storageBucket: 'citiditzacatepec.firebasestorage.app',
+      measurementId: 'G-BJHS1V26TH',
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>

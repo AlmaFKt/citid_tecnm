@@ -3,6 +3,7 @@ import 'package:citid_tecnm/Sesiones/registros/MainRegistro.dart';
 import 'package:citid_tecnm/componentes/Theme.dart';
 import 'package:citid_tecnm/componentes/widgets.dart';
 import 'package:citid_tecnm/content/home.dart';
+import 'package:citid_tecnm/revisiones/ponente/subir_voucher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,7 +53,7 @@ class _InicioSesionState extends State<InicioSesion> {
       // Close the loading indicator
       Navigator.pop(context);
 
-      Get.to(() => HomePage());
+      Get.to(() => RegistroPago());
     } on FirebaseAuthException catch (e) {
       // Close the loading indicator
       Navigator.pop(context);

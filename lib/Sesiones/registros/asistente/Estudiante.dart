@@ -121,6 +121,37 @@ class _AsistentePageState extends State<AsistentePage> {
     }
   }
 
+  Future<void> _consultarEstudiante() async {
+    String numControl = ndcController.text;
+
+    if (numControl.isNotEmpty) {
+      try {
+        DocumentSnapshot doc = await FirebaseFirestore.instance
+            .collection('itz')
+            .doc('tecnamex')
+            .collection('estudiantes')
+            .doc(numControl)
+            .get();
+
+        if (doc.exists) {
+          setState(() {
+            usernameController.text = doc['nombre'];
+            apellidosController.text = doc['apellidos'];
+            numeroTelController.text = doc['telefono'];
+            carreraController.text = doc['carrera'];
+          });
+        } } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al consultar estudiante: $e')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Por favor, ingrese el número de control')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,10 +201,16 @@ class _AsistentePageState extends State<AsistentePage> {
 
                     sb13,
 
-                    MyTextField(
-                      controller: ndcController,
-                      hintText: 'Núm. de control',
-                      obscureText: false,
+                    Row(
+                      children: [
+                        MyTextField(
+                          controller: ndcController,
+                          hintText: 'Núm. de control',
+                          obscureText: false,
+                        ),
+                        sb10,
+                        MyButton(text: "Consultar", onTap: _consultarEstudiante)
+                      ],
                     ),
 
                     sb13,

@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '179217794792',
     projectId: 'citiditzacatepec',
     authDomain: 'citiditzacatepec.firebaseapp.com',
-    storageBucket: 'citiditzacatepec.appspot.com',
+    storageBucket: 'citiditzacatepec.firebasestorage.app',
     measurementId: 'G-BJHS1V26TH',
   );
 }
