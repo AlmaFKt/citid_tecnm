@@ -16,54 +16,57 @@ class _SubirArchivoState extends State<SubirArchivo> {
   String? _areaSeleccionada;
   String? _temaSeleccionado;
   String? _nombreArchivo;
+  PlatformFile? _platformFile;
 
   final TextEditingController _tituloController = TextEditingController();
 
   final Map<String, List<String>> _areaTemas = {
     'Ingeniería Industrial': [
-      'MANUFACTURA ESBELTA Y CALIDAD',
+      'Ingenierá de métodos y ergonomía',
+      'Logística y cadenas de suministros',
+      'Manufactura esbelta y calidad',
     ],
     'Ingeniería Electromécanica': [
-      'DISEÑO Y SIMULACIÓN DE SISTEMAS ELECTROMECÁNICOS',
+      'Sistemas electromecánicos avanzados',
     ],
     'Ingeniería Civil': [
-      'DISEÑO ESTRUCTURAL Y OBRAS CIVILES',
+      'Infraestructura, obras civiles y diseño estructural normativo',
     ],
     'Ingeniería Química': [
-      'MATERIALES POLIMÉRICOS',
-      'TECNOLOGÍA AMBIENTAL',
-      'BIOTECNOLOGÍA AMBIENTAL',
-      'PROCESOS QUÍMICOS Y BIOQUÍMICOS'
+      'Biotecnología ambiental',
+      'Materiales poliméricos',
+      'Procesos químicos',
+      'Tecnología ambiental',
     ],
     'Ingeniería Bioquímica': [
-      'PROCESOS QUÍMICOS Y BIOQUÍMICOS',
-      'CIENCIA Y TECNOLOGÍA DE ALIMENTOS ',
-      'BIOTECNOLOGÍA DE ALIMENTOS',
+      'Biotecnología de alimentos',
+      'Ciencia y tecnología de alimentos',
+      'Bioprocesos',
     ],
-    'Ciencias Básicas': [
-      'ENSEÑANZA DE LAS CIENCIAS BÁSICAS',
-      'ESTADÍSTICA Y TOMA DE DECISIONES',
-      'RETOS Y PERSPECTIVAS EN LA APLICACIÓN DE LAS CIENCIAS BÁSICAS',
+    'Lic. En Turismo': [
+      'Ecoturismo y Emprendimiento Comunitario',
     ],
-    'Ingeniería en Administración de empresas': [
-      'GESTIÓN DEL TALENTO HUMANO PARA LA INNOVACIÓN',
+    'Ingeniería en Administración': [
+      'Tópicos avanzados de administración',
     ],
     'Ingeniería en Gestion Empresarial': [
-      'INNOVACIÓN ESTRATÉGICA DE LAS ORGANIZACIONES',
+      'Digitalización de las organizaciones',
     ],
     'Ingeniería en Sistemas Computacionales': [
-      'APLICACIONES EN ENTORNOS WEB Y MÓVIL',
-      'CIENCIA DE DATOS PARA LA TOMA DE DECISIONES',
-      'INTELIGENCIA ARTIFICIAL',
-      'INTERNET DE LAS COSAS',
+      'Aplicaciones en entornos web y móvile',
+      'Ciencia de datos para la toma de decisiones',
+      'Inteligencia artificial',
+      'Internet de las cosas',
     ],
-    'Maestría en Ciencias': [
-      'BIOMATERIALES POLIMÉRICOS',
-      'INGENIERÍA Y TECNOLOGÍA DE MATERIALES',
+    'Docencia': [
+      'Investigación educativa en Ingeniería',
+      'Retos y Perspectivas en la Aplicación de las Ciencias Básicas'
     ],
-    'Maestría en Procesos': [
-      'DESARROLLO DE TECNOLOGÍA E INNOVACIÓN',
-      'MODELADO Y SIMULACIÓN DE PROCESOS',
+    'Posgrado': [
+      'Biomateriales poliméricos',
+      'Desarrollo de Tecnologías e innovación',
+      'Diseño de Materiales en Ingeniería Sustentable',
+      'Modelado y Simulación de Procesos',
     ],
   };
 
@@ -76,6 +79,7 @@ class _SubirArchivoState extends State<SubirArchivo> {
     if (result != null) {
       setState(() {
         _nombreArchivo = result.files.single.name;
+        _platformFile = result.files.single;
       });
     }
   }

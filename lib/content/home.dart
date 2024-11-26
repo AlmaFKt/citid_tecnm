@@ -4,6 +4,7 @@ import 'package:citid_tecnm/componentes/boton.dart';
 import 'package:citid_tecnm/componentes/widgets.dart';
 import 'package:citid_tecnm/content/PonentePage.dart';
 import 'package:citid_tecnm/content/asistentePage.dart';
+import 'package:citid_tecnm/content/info_seccion.dart';
 import 'package:citid_tecnm/content/programa.dart';
 import 'package:citid_tecnm/revisiones/depi/lista_articulos.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
           Get.off(() => Ponentepage());
         } else if (userType == 'RevInterno') {
           Get.off(() => RevisorWorkspace());
-          } else if (userType == 'Depi') {
+        } else if (userType == 'Depi') {
           Get.off(() => ListaArticulos());
         } else if (userType == 'Estudiante') {
           Get.off(() => PerfilAsistentePage());
@@ -224,9 +225,9 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () => Get.to(Ponentepage()),
                     ),
                     IconButton(
-                      icon: Icon(Icons.info_outline, color: blanco),
+                      icon: Icon(Icons.info_outline, color: blanco), //
                       onPressed: () {
-                        Get.to(SubirArchivo());
+                        Get.to(InfoPage());
                       },
                     ),
                     IconButton(
@@ -275,7 +276,9 @@ class _HomePageState extends State<HomePage> {
                       ListTile(
                         leading: Icon(Icons.info_outline),
                         title: Text('Información'),
-                        onTap: () => _scrollToSection(_congressInfoKey),
+                        onTap: () {
+                          Get.to(InfoPage());
+                        },
                       ),
                       ListTile(
                         leading: Icon(Icons.calendar_month),

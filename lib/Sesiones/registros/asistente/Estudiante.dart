@@ -47,6 +47,40 @@ class _AsistentePageState extends State<AsistentePage> {
 
   String? selectedCarrera;
 
+  Future<void> _consultarEstudiante() async {
+    String numControl = ndcController.text.trim();
+    if (numControl.isNotEmpty) {
+      try {
+        DocumentSnapshot doc = await FirebaseFirestore.instance
+            .collection('itz')
+            .doc('tecnamex')
+            .collection('estudiantes')
+            .doc(numControl)
+            .get();
+
+        if (doc.exists) {
+          setState(() {
+            usernameController.text = doc['nombre'];
+            apellidosController.text = doc['apellidos'];
+            carreraController.text = doc['carrera'];
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Estudiante no encontrado')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al consultar estudiante: $e')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Por favor, ingrese el número de control')),
+      );
+    }
+  }
+
   //register user in method event
   void registerUserIn(BuildContext context) async {
     try {
@@ -121,37 +155,6 @@ class _AsistentePageState extends State<AsistentePage> {
     }
   }
 
-  Future<void> _consultarEstudiante() async {
-    String numControl = ndcController.text;
-
-    if (numControl.isNotEmpty) {
-      try {
-        DocumentSnapshot doc = await FirebaseFirestore.instance
-            .collection('itz')
-            .doc('tecnamex')
-            .collection('estudiantes')
-            .doc(numControl)
-            .get();
-
-        if (doc.exists) {
-          setState(() {
-            usernameController.text = doc['nombre'];
-            apellidosController.text = doc['apellidos'];
-            numeroTelController.text = doc['telefono'];
-            carreraController.text = doc['carrera'];
-          });
-        } } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al consultar estudiante: $e')),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Por favor, ingrese el número de control')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -203,13 +206,16 @@ class _AsistentePageState extends State<AsistentePage> {
 
                     Row(
                       children: [
-                        MyTextField(
+                        TextField(
                           controller: ndcController,
-                          hintText: 'Núm. de control',
-                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Num. de Control',
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.search),
+                              onPressed: _consultarEstudiante,
+                            ),
+                          ),
                         ),
-                        sb10,
-                        MyButton(text: "Consultar", onTap: _consultarEstudiante)
                       ],
                     ),
 

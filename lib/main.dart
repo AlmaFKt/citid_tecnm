@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'CITID',
       debugShowCheckedModeBanner: false,
-      home: SubirArchivo(),
+      home: HomePage(),
     );
   }
 }
