@@ -448,64 +448,99 @@ class _HomePageState extends State<HomePage> {
       key: _importantDatesKey,
       children: [
         Text(
-          'Fechas Importantes',
+          'Eventos del Congreso',
           style: titulo,
           textAlign: TextAlign.center,
         ),
-        sb10,
+        SizedBox(height: 10),
         Container(
           height: 500,
           child: Card(
             elevation: 4,
-            child: Column(
+            child: ListView(
               children: [
-                if (_calendarController.view == CalendarView.day)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () {
-                            setState(() {
-                              _calendarController.view = CalendarView.month;
-                            });
-                          },
-                        ),
-                        Text(
-                          'Eventos del día',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 48),
-                      ],
-                    ),
-                  ),
-                Expanded(
-                  child: SfCalendar(
-                    view: CalendarView.month,
-                    controller: _calendarController,
-                    dataSource: _getCalendarDataSource(),
-                    onTap: _onCalendarTapped,
-                    monthViewSettings: MonthViewSettings(
-                      appointmentDisplayMode:
-                          MonthAppointmentDisplayMode.indicator,
-                      showAgenda: true,
-                      agendaViewHeight: 200,
-                    ),
-                    headerStyle: CalendarHeaderStyle(
-                      backgroundColor: azulOscuro,
-                      textAlign: TextAlign.center,
-                      textStyle: TextStyle(color: blanco, fontSize: 18),
-                    ),
-                  ),
-                ),
+                _buildEventTimeline([
+                  {
+                    'date': '1 de Octubre',
+                    'time': '09:00 - 10:00',
+                    'title': 'Inauguración del Congreso',
+                    'location': 'Auditorio Principal'
+                  },
+                  {
+                    'date': '1 de Octubre',
+                    'time': '10:30 - 12:00',
+                    'title': 'Conferencia Magistral',
+                    'location': 'Sala de Conferencias'
+                  },
+                  {
+                    'date': '2 de Octubre',
+                    'time': '14:00 - 16:00',
+                    'title': 'Talleres Técnicos',
+                    'location': 'Laboratorios'
+                  },
+                  {
+                    'date': '3 de Octubre',
+                    'time': '09:00 - 11:00',
+                    'title': 'Presentación de Proyectos',
+                    'location': 'Auditorio B'
+                  }
+                ])
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildEventTimeline(List<Map<String, String>> events) {
+    return Column(
+      children: events.map((event) {
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+              color: azulClaro.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: azulClaro, width: 1)),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    event['date']!,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: azulOscuro),
+                  ),
+                  Text(
+                    event['time']!,
+                    style: TextStyle(color: gris, fontSize: 12),
+                  ),
+                ],
+              ),
+              SizedBox(width: 15),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      event['title']!,
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    ),
+                    Text(
+                      event['location']!,
+                      style: TextStyle(color: gris, fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 
