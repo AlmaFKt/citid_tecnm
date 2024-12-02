@@ -239,7 +239,8 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                       icon: Icon(Icons.account_circle_outlined, color: blanco),
                       onPressed: () {
-                        _checkUserStatus(context);
+                       _checkUserStatus(context);
+                       //Get.to(ListaArticulos());
                       },
                     ),
                     IconButton(
@@ -252,7 +253,7 @@ class _HomePageState extends State<HomePage> {
           ),
           drawer: isSmallScreen
               ? Drawer(
-                  backgroundColor: blanco,
+                  backgroundColor: azul,
                   child: ListView(
                     padding: EdgeInsets.zero,
                     children: [
@@ -292,6 +293,7 @@ class _HomePageState extends State<HomePage> {
                         title: Text('Usuario'),
                         onTap: () {
                           _checkUserStatus(context);
+                          //Get.to(ListaArticulos());
                         },
                       ),
                       ListTile(
@@ -464,7 +466,7 @@ class _HomePageState extends State<HomePage> {
                     'date': '1 de Octubre',
                     'time': '09:00 - 10:00',
                     'title': 'Inauguración del Congreso',
-                    'location': 'Auditorio Principal'
+                    'location': 'Auditorio'
                   },
                   {
                     'date': '1 de Octubre',
@@ -473,16 +475,21 @@ class _HomePageState extends State<HomePage> {
                     'location': 'Sala de Conferencias'
                   },
                   {
-                    'date': '2 de Octubre',
+                    'date': '1 de Octubre',
                     'time': '14:00 - 16:00',
                     'title': 'Talleres Técnicos',
                     'location': 'Laboratorios'
                   },
                   {
-                    'date': '3 de Octubre',
+                    'date': '1 de Octubre',
                     'time': '09:00 - 11:00',
                     'title': 'Presentación de Proyectos',
-                    'location': 'Auditorio B'
+                    'location': 'Auditorio'
+                  },{
+                   'date': '1 de Octubre',
+                    'time': '07:00 - 11:30',
+                    'title': 'Conferencia de IA',
+                    'location': 'SUM-2'
                   }
                 ])
               ],

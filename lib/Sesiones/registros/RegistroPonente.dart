@@ -106,8 +106,6 @@ class _RegisterPageState extends State<RegisterPage> {
           duration: Duration(seconds: 3),
         ),
       );
-      print("Error during user registration: $e");
-      debugPrint("Stack trace: ${e.toString()}");
     }
   }
 
